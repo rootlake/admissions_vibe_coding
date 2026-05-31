@@ -4,6 +4,8 @@ Slides, live demos, and copy-paste prompts for the **GBS AI in Admissions Worksh
 
 **Live site:** [rootlake.github.io/admissions_vibe_coding](https://rootlake.github.io/admissions_vibe_coding/)
 
+**Takeaways (mobile):** [takeaways.html](https://rootlake.github.io/admissions_vibe_coding/takeaways.html) — QR on final slide links here.
+
 ## What's here
 
 | Path | Description |
