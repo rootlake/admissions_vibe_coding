@@ -1,0 +1,705 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vibe Coding for Admissions Work</title>
+
+<!-- reveal.js (CDN) -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.css">
+
+<!-- Google Fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+
+<style>
+:root{
+  /* palette */
+  --navy:#0F2A4A;
+  --navy-deep:#0B2038;
+  --gold:#C2A14D;
+  --gold-soft:#D8BE7E;
+  --cream:#F6F2E9;
+  --cream-2:#EDE7D8;
+  --ink:#14181F;
+  /* code panel */
+  --code-bg:#0D1117;
+  --code-line:#1C2230;
+  --code-text:#E6EDF3;
+  --code-comment:#8B949E;
+  --code-key:#C2A14D;
+  --code-str:#9DC3A0;
+  /* fonts */
+  --serif:'Cormorant Garamond', Georgia, serif;
+  --sans:'Inter', system-ui, sans-serif;
+  --mono:'JetBrains Mono', ui-monospace, monospace;
+  /* type scale (1920x1080) */
+  --type-display:94px;
+  --type-title:78px;
+  --type-lead:48px;
+  --type-subtitle:38px;
+  --type-body:32px;
+  --type-small:25px;
+  --type-tag:23px;
+  --type-code:28px;
+  /* spacing */
+  --pad-x:120px;
+  --pad-y:96px;
+  --gap-title:40px;
+}
+
+/* ---- reveal frame ---- */
+.reveal{ font-family:var(--sans); }
+.reveal .slides{ text-align:left; }
+.reveal .slides section{
+  height:1080px; width:1920px; padding:0;
+  display:block; overflow:hidden;
+}
+.reveal .slides section:focus{ outline:none; }
+
+/* per-slide frame */
+.frame{
+  position:relative; box-sizing:border-box;
+  width:1920px; height:1080px;
+  padding:var(--pad-y) var(--pad-x);
+  display:flex; flex-direction:column;
+}
+
+/* backgrounds */
+.bg-navy{ background:var(--navy); color:var(--cream); }
+.bg-navy .frame{ background:
+    radial-gradient(1400px 700px at 82% -10%, rgba(194,161,77,0.10), transparent 60%); }
+.bg-cream{ background:var(--cream); color:var(--ink); }
+
+/* section tag + page number */
+.tag{
+  position:absolute; top:var(--pad-y); left:var(--pad-x);
+  font-family:var(--mono); font-size:var(--type-tag); font-weight:500;
+  letter-spacing:.04em; opacity:.62;
+}
+.bg-navy .tag{ color:var(--gold-soft); }
+.bg-cream .tag{ color:var(--navy); }
+.pageno{
+  position:absolute; bottom:var(--pad-y); right:var(--pad-x);
+  font-family:var(--mono); font-size:var(--type-tag); letter-spacing:.08em;
+  display:flex; align-items:center; gap:14px; opacity:.7;
+}
+.pageno::before{ content:""; width:34px; height:1px; background:var(--gold); opacity:.8; }
+.bg-navy .pageno{ color:var(--gold-soft); }
+.bg-cream .pageno{ color:var(--navy); }
+
+/* content region sits below the tag, breathes at bottom */
+.body{ flex:1; display:flex; flex-direction:column; justify-content:center;
+  margin-top:54px; min-height:0; }
+.body.top{ justify-content:flex-start; }
+
+/* titles */
+h1,h2{ margin:0; font-family:var(--serif); font-weight:600; line-height:1.02;
+  letter-spacing:-0.01em; }
+.slide-title{ font-size:var(--type-title); color:inherit; }
+.bg-cream .slide-title{ color:var(--navy); }
+.rule{ width:96px; height:3px; background:var(--gold); margin:26px 0 0; border-radius:2px; }
+
+/* generic text */
+p{ margin:0; }
+.lead{ font-family:var(--serif); font-size:var(--type-lead); line-height:1.18;
+  font-weight:500; max-width:1500px; }
+.bg-cream .lead{ color:var(--navy); }
+.kicker{ font-family:var(--mono); font-size:var(--type-small); letter-spacing:.02em;
+  color:var(--gold); }
+.muted{ opacity:.72; }
+
+/* code / terminal panel */
+.panel{
+  background:var(--code-bg); border:1px solid var(--code-line); border-radius:12px;
+  font-family:var(--mono); color:var(--code-text); overflow:hidden;
+  box-shadow:0 26px 60px -30px rgba(0,0,0,.55);
+}
+.panel .bar{ display:flex; align-items:center; gap:9px; padding:16px 20px;
+  border-bottom:1px solid var(--code-line); }
+.panel .bar i{ width:12px; height:12px; border-radius:50%; display:inline-block; }
+.panel .bar .d1{ background:#E06C5A; } .panel .bar .d2{ background:var(--gold); }
+.panel .bar .d3{ background:#6FA36F; }
+.panel .bar span{ margin-left:10px; font-size:20px; color:var(--code-comment); }
+.panel pre{ margin:0; padding:30px 34px; font-size:var(--type-code); line-height:1.62;
+  white-space:pre-wrap; }
+.cm{ color:var(--code-comment); }   /* comment */
+.kw{ color:var(--code-key); }       /* keyword  */
+.st{ color:var(--code-str); }       /* string   */
+.pr{ color:var(--gold-soft); }      /* prompt > */
+
+/* terminal one-liner */
+.term{ font-family:var(--mono); font-size:var(--type-small); color:var(--gold-soft); }
+.term .c{ color:var(--code-comment); }
+
+/* columns */
+.cols{ display:grid; gap:48px; }
+.col-card{ border:1px solid rgba(194,161,77,.45); border-radius:12px;
+  padding:34px 36px; background:rgba(255,255,255,.02); }
+.bg-cream .col-card{ background:#fff; border-color:rgba(15,42,74,.14);
+  box-shadow:0 18px 40px -28px rgba(15,42,74,.4); }
+.col-card h3{ margin:0 0 12px; font-family:var(--serif); font-weight:600;
+  font-size:40px; color:var(--gold); }
+.bg-cream .col-card h3{ color:var(--navy); }
+.col-card p{ font-size:var(--type-body); line-height:1.35; }
+
+/* numbered / checklist */
+.list{ list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:26px; }
+.list li{ display:flex; gap:22px; align-items:baseline; font-size:var(--type-body);
+  line-height:1.3; }
+.list .mk{ font-family:var(--mono); color:var(--gold); font-size:30px; flex:none;
+  width:42px; }
+
+/* embed (live demo) */
+.embed{ display:flex; flex-direction:column; height:100%; min-height:0; }
+.embed .embed-head{ display:flex; align-items:center; justify-content:space-between;
+  margin-bottom:16px; }
+.embed .embed-label{ font-family:var(--mono); font-size:var(--type-small);
+  letter-spacing:.04em; color:var(--gold); display:flex; align-items:center; gap:12px; }
+.embed .embed-label .dot{ width:11px; height:11px; border-radius:50%; background:#E06C5A;
+  box-shadow:0 0 0 0 rgba(224,108,90,.6); animation:pulse 2s infinite; }
+@keyframes pulse{ 0%{box-shadow:0 0 0 0 rgba(224,108,90,.55);}
+  70%{box-shadow:0 0 0 14px rgba(224,108,90,0);} 100%{box-shadow:0 0 0 0 rgba(224,108,90,0);} }
+.open-btn{ font-family:var(--mono); font-size:21px; color:var(--navy); background:var(--gold);
+  border:none; border-radius:8px; padding:11px 18px; cursor:pointer; font-weight:500;
+  transition:filter .15s ease; }
+.open-btn:hover{ filter:brightness(1.08); }
+.embed iframe{ flex:1; width:100%; border:1px solid rgba(194,161,77,.55); border-radius:12px;
+  background:var(--navy-deep); min-height:0; }
+
+/* footer note line */
+.footnote{ font-family:var(--mono); font-size:var(--type-small); margin-top:34px; }
+.bg-cream .footnote{ color:var(--navy); opacity:.7; }
+.bg-navy .footnote{ color:var(--gold-soft); opacity:.85; }
+
+/* hairline */
+.hair{ height:1px; background:linear-gradient(90deg, var(--gold), transparent);
+  opacity:.5; }
+
+/* gold accent strip (sanitize slide) */
+.accent-strip{ position:absolute; top:0; left:0; width:14px; height:100%; background:var(--gold); }
+
+/* before/after chip */
+.ba{ display:flex; gap:18px; align-items:stretch; }
+.ba .chip{ background:#fff; border:1px solid rgba(15,42,74,.16); border-radius:10px;
+  padding:18px 22px; font-family:var(--mono); font-size:22px; min-width:260px; }
+.ba .chip .h{ color:var(--gold); font-size:18px; letter-spacing:.1em; margin-bottom:12px; }
+.ba .chip .row{ color:var(--navy); line-height:1.7; }
+.ba .chip .blank{ color:#9aa3ad; letter-spacing:.05em; }
+.ba .arrow{ align-self:center; color:var(--gold); font-size:34px; font-family:var(--mono); }
+
+/* tags row */
+.tagrow{ display:flex; gap:18px; flex-wrap:wrap; margin-top:38px; }
+.tagrow .t{ font-family:var(--mono); font-size:24px; color:var(--gold-soft);
+  border:1px solid rgba(194,161,77,.5); border-radius:999px; padding:12px 22px; }
+.bg-navy .tagrow .t{ background:rgba(194,161,77,.06); }
+
+/* crest placeholder */
+.crest{ width:248px; height:248px; flex:none; border:2px dashed var(--gold);
+  border-radius:8px; display:flex; flex-direction:column; align-items:center;
+  justify-content:center; gap:14px; color:var(--gold-soft); background:rgba(194,161,77,.05); }
+.crest .pl{ font-family:var(--mono); font-size:19px; letter-spacing:.06em; text-align:center;
+  line-height:1.5; opacity:.9; }
+.crest .ico{ font-family:var(--serif); font-size:56px; opacity:.5; }
+
+/* title slide — title left, crest + headshot right */
+.title-hero{
+  display:flex; align-items:center; gap:80px; width:100%;
+}
+.title-main{ flex:1; min-width:0; }
+.title-aside{
+  flex:none; display:flex; align-items:flex-end; gap:48px;
+}
+.title-brand{
+  display:flex; flex-direction:column; align-items:center; gap:20px;
+}
+.title-brand img.crest-img{
+  width:200px; height:200px; object-fit:contain;
+  filter: drop-shadow(0 10px 28px rgba(0,0,0,.3));
+}
+.title-brand img.headshot{
+  width:200px; height:200px; object-fit:cover; object-position:center 12%;
+  border-radius:50%; border:4px solid var(--gold);
+  box-shadow:0 16px 40px -10px rgba(0,0,0,.5);
+}
+.title-brand .lbl{
+  font-family:var(--mono); font-size:20px; letter-spacing:.08em;
+  color:var(--gold-soft); text-align:center; opacity:.9;
+}
+
+.panel pre.prompt-live{ font-size:21px; line-height:1.55; padding:22px 28px; max-height:520px; overflow:hidden; }
+
+/* canvas slide layout */
+.canvas-layout{ display:grid; grid-template-columns:340px 1fr; gap:40px; align-items:stretch; margin-top:36px; flex:1; min-height:0; }
+.canvas-tools{ display:flex; flex-direction:column; gap:18px; }
+.canvas-tools .col-card{ padding:22px 24px; }
+.canvas-tools .col-card h3{ font-size:28px; margin-bottom:6px; }
+.canvas-tools .col-card p{ font-size:22px; line-height:1.3; }
+.canvas-tools .col-card .tool-tag{ font-family:var(--mono); font-size:16px; color:var(--gold-soft); margin-bottom:10px; }
+.panel.prompt-panel{ flex:1; display:flex; flex-direction:column; min-height:0; margin-top:0; }
+.panel.prompt-panel pre{ flex:1; font-size:19px; line-height:1.5; padding:20px 26px; overflow:hidden; }
+.panel.prompt-panel .bar span.file-hint{ margin-left:auto; font-size:16px; color:var(--code-comment); }
+
+/* QR / link placeholder */
+.qr{ width:150px; height:150px; border:2px solid var(--gold); border-radius:8px;
+  display:flex; align-items:center; justify-content:center; font-family:var(--mono);
+  font-size:16px; color:var(--gold-soft); text-align:center; line-height:1.4; flex:none;
+  overflow:hidden; background:#fff; padding:8px; }
+.qr img{ width:100%; height:100%; object-fit:contain; display:block; }
+
+/* share & export menu (meta slide) */
+.menu{ width:548px; flex:none; background:#fff; border-radius:16px;
+  border:1px solid rgba(15,42,74,.10); box-shadow:0 44px 100px -45px rgba(0,0,0,.65);
+  padding:30px 32px; color:var(--ink); font-family:var(--sans); }
+.menu .mlabel{ font-size:25px; font-weight:600; color:var(--navy); margin-bottom:14px; }
+.menu .select{ display:flex; align-items:center; justify-content:space-between; gap:12px;
+  border:1px solid rgba(15,42,74,.18); border-radius:10px; padding:14px 16px;
+  font-size:24px; color:var(--ink); }
+.menu .select svg{ width:20px; height:20px; color:#8b93a1; flex:none; }
+.menu .copy{ display:inline-block; margin:16px 0 10px; background:var(--ink); color:#fff;
+  font-size:22px; font-weight:500; padding:11px 20px; border-radius:9px; }
+.menu .hint{ font-size:20px; color:#8b93a1; }
+.menu .div{ height:1px; background:rgba(15,42,74,.10); margin:18px 0; }
+.menu .item{ display:flex; align-items:center; gap:18px; font-size:24px; color:var(--ink);
+  padding:8px 0; }
+.menu .item svg{ width:25px; height:25px; flex:none; color:#5b6675; }
+
+/* utility */
+.stack{ display:flex; flex-direction:column; }
+
+/* navigation dots */
+.deck-dots{ position:fixed; left:50%; bottom:30px; transform:translateX(-50%);
+  display:flex; align-items:center; gap:16px; z-index:60;
+  padding:11px 18px; border-radius:999px;
+  background:rgba(15,42,74,.30); backdrop-filter:blur(6px);
+  border:1px solid rgba(194,161,77,.30); }
+.deck-dots button{ width:11px; height:11px; padding:0; border-radius:50%; cursor:pointer;
+  border:1px solid var(--gold); background:transparent; opacity:.55;
+  transition:opacity .18s ease, transform .18s ease, background .18s ease; }
+.deck-dots button:hover{ opacity:.9; }
+.deck-dots button.active{ background:var(--gold); opacity:1; transform:scale(1.25); }
+
+@media print { .deck-dots { display: none; } }
+</style>
+</head>
+<body>
+<div class="reveal">
+<div class="slides">
+
+  <!-- ===== 1 · TITLE ===== -->
+  <section class="bg-navy" data-screen-label="01" data-label="01">
+    <div class="frame">
+      <span class="tag">// intro</span>
+      <div class="body" style="justify-content:center;">
+        <div class="title-hero">
+          <div class="title-main stack">
+            <p class="kicker" style="margin-bottom:22px;">// a working tour</p>
+            <h1 style="font-size:var(--type-display);">Vibe Coding for<br>Admissions Work</h1>
+            <div class="rule"></div>
+            <p class="lead" style="margin-top:34px; opacity:.92;">Principles and Live Demos</p>
+          </div>
+          <div class="title-aside">
+            <div class="title-brand">
+              <img src="assets/pomfret-crest.png" alt="Pomfret School crest" class="crest-img">
+              <span class="lbl">Pomfret School</span>
+            </div>
+            <div class="title-brand">
+              <img src="assets/josh-lake-headshot.jpg" alt="Josh Lake" class="headshot">
+              <span class="lbl">Josh Lake</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="stack" style="gap:22px;">
+        <div class="hair"></div>
+        <p class="footnote" style="opacity:.9;">Great Boarding Schools&nbsp; ·&nbsp; AI in Admissions Workshop&nbsp; ·&nbsp; Westminster School&nbsp; ·&nbsp; June 1, 2026&nbsp; ·&nbsp; Josh Lake, Pomfret School</p>
+        <p class="term">&gt; vibe-coding <span class="c">--for</span> admissions <span class="c">--time</span> 45min</p>
+      </div>
+      <span class="pageno">01</span>
+    </div>
+  </section>
+
+  <!-- ===== 2 · BUILT IN CLAUDE (meta) ===== -->
+  <section class="bg-navy" data-screen-label="02" data-label="02">
+    <div class="frame">
+      <span class="tag">// meta</span>
+      <div class="body" style="flex-direction:row; align-items:center; gap:88px;">
+        <div class="stack" style="flex:1;">
+          <p class="kicker" style="margin-bottom:22px;">// you're looking at it</p>
+          <h2 class="slide-title">Built in Claude</h2>
+          <div class="rule"></div>
+          <p class="lead" style="margin-top:34px;">These slides were generated from a one-page brief, then refined by hand — in the tools you'll see this afternoon.</p>
+          <p class="footnote" style="margin-top:40px;">One design &rarr; PDF, PPTX, standalone HTML, Canva, or a full code handoff.</p>
+          <p class="term" style="margin-top:24px;">&gt; made-with <span class="c">claude</span> --design</p>
+        </div>
+        <div class="menu">
+          <div class="mlabel">Access</div>
+          <div class="select"><span>Teammates can comment</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg></div>
+          <span class="copy">Copy link</span>
+          <div class="hint">Only you can see this design.</div>
+          <div class="div"></div>
+          <div class="item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="8" y="8" width="12" height="12" rx="2"/><path d="M4 16V6a2 2 0 0 1 2-2h10"/></svg><span>Duplicate project</span></div>
+          <div class="item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="4" y="4" width="7" height="7" rx="1.5"/><rect x="13" y="4" width="7" height="7" rx="1.5"/><rect x="4" y="13" width="7" height="7" rx="1.5"/><path d="M16.5 14v5M14 16.5h5"/></svg><span>Duplicate as template</span></div>
+          <div class="div"></div>
+          <div class="item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M12 4v10m0 0l-4-4m4 4l4-4"/><path d="M5 19h14"/></svg><span>Download project as .zip</span></div>
+          <div class="item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M14 4H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V9z"/><path d="M14 4v5h5"/><path d="M9 13h6M9 16h5"/></svg><span>Export as PDF</span></div>
+          <div class="item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M14 4H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V9z"/><path d="M14 4v5h5"/><path d="M9 13h6M9 16h5"/></svg><span>Export as PPTX&hellip;</span></div>
+          <div class="item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M14 4H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V9z"/><path d="M14 4v5h5"/><path d="M9 13h6M9 16h5"/></svg><span>Export as standalone HTML</span></div>
+          <div class="div"></div>
+          <div class="item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M14 5h5v5"/><path d="M19 5l-8 8"/><path d="M18 13v5a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/></svg><span>Send to Canva&hellip;</span></div>
+          <div class="div"></div>
+          <div class="item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="4" y="5" width="16" height="14" rx="2"/><path d="M8 10l3 2-3 2"/><path d="M13 14h4"/></svg><span>Handoff to Claude Code&hellip;</span></div>
+        </div>
+      </div>
+      <span class="pageno">02</span>
+    </div>
+  </section>
+
+  <!-- ===== 3 · WHAT IS VIBE CODING ===== -->
+  <section class="bg-cream" data-screen-label="03" data-label="03">
+    <div class="frame">
+      <span class="tag">// concept</span>
+      <div class="body">
+        <h2 class="slide-title">Vibe Coding?</h2>
+        <div class="rule"></div>
+        <p class="lead" style="margin-top:40px;">Describe what you want in plain English. The AI writes the code. <span style="color:var(--gold);">You</span> stay the analyst — and the judge.</p>
+
+        <div style="display:grid; grid-template-columns:1.05fr 1fr; gap:64px; align-items:start; margin-top:56px;">
+          <div class="cols" style="grid-template-columns:1fr 1fr;">
+            <div class="col-card">
+              <h3>You don't write code</h3>
+              <p class="muted">You write requests. The machine handles the syntax.</p>
+            </div>
+            <div class="col-card">
+              <h3>You decide what good looks like</h3>
+              <p class="muted">Accuracy, clarity, judgment — that stays human.</p>
+            </div>
+          </div>
+
+          <div class="panel">
+            <div class="bar"><i class="d1"></i><i class="d2"></i><i class="d3"></i><span>request → code</span></div>
+            <pre><span class="pr">&gt;</span> <span class="st">"Chart our inquiry funnel by month."</span>
+
+<span class="cm">// the AI writes:</span>
+<span class="kw">new</span> Chart(ctx, {
+  type: <span class="st">'bar'</span>,
+  data: monthlyInquiries
+})</pre>
+          </div>
+        </div>
+      </div>
+      <span class="pageno">03</span>
+    </div>
+  </section>
+
+  <!-- ===== 4 · DATA → USEFUL (DEMO) ===== -->
+  <section class="bg-cream" data-screen-label="04" data-label="04">
+    <div class="frame">
+      <span class="tag">// demo 01</span>
+      <div class="body top" style="margin-top:64px;">
+        <h2 class="slide-title">Raw Data → Something Useful</h2>
+        <div class="rule"></div>
+        <div style="display:grid; grid-template-columns:0.82fr 1.18fr; gap:72px; align-items:stretch; margin-top:48px; flex:1; min-height:0;">
+          <div class="stack" style="justify-content:center; gap:30px;">
+            <p class="lead">Spreadsheet in.<br>Dashboard out.</p>
+            <p style="font-size:var(--type-body); line-height:1.4;" class="muted">A column of inquiries becomes a picture you can actually read in a meeting.</p>
+            <p class="footnote" style="margin-top:8px;">407 inquiry records → one readable view.</p>
+          </div>
+          <div class="embed">
+            <div class="embed-head">
+              <span class="embed-label"><span class="dot"></span>LIVE: Funnel dashboard</span>
+              <button class="open-btn" id="funnel-open">Open in new tab&nbsp;↗</button>
+            </div>
+            <iframe id="funnel-frame" title="Funnel dashboard"></iframe>
+          </div>
+        </div>
+      </div>
+      <span class="pageno">04</span>
+    </div>
+  </section>
+
+  <!-- ===== 5 · FIRST: SANITIZE ===== -->
+  <section class="bg-cream" data-screen-label="05" data-label="05" data-notes="Sanitize before any live paste. Demo files in this repo are already aggregated.">
+    <div class="frame">
+      <span class="accent-strip"></span>
+      <span class="tag">// safety</span>
+      <div class="body top" style="margin-top:48px;">
+        <p class="kicker" style="margin-bottom:18px;">// critical — do this first</p>
+        <h2 class="slide-title">First: sanitize</h2>
+        <p class="lead" style="margin-top:22px; font-size:38px;">Before any data touches a public AI tool.</p>
+
+        <div style="display:grid; grid-template-columns:1.15fr 1fr; gap:64px; align-items:start; margin-top:40px;">
+          <div>
+            <ul class="list" style="gap:20px;">
+              <li><span class="mk">01</span><span>Remove names, emails, student IDs, and addresses.</span></li>
+              <li><span class="mk">02</span><span>Aggregate where you can — counts and summaries, not rows.</span></li>
+              <li><span class="mk">03</span><span>Never paste FERPA / PII into public chat tools.</span></li>
+              <li><span class="mk">04</span><span>Export a <em>sanitized copy</em> — work from that, keep raw files offline.</span></li>
+              <li><span class="mk">05</span><span>Re-sanitize each cycle; don't reuse last year's export blindly.</span></li>
+              <li><span class="mk">06</span><span>Brand colors &amp; fonts from your style guide are fine — student photos are not.</span></li>
+            </ul>
+            <p class="footnote" style="margin-top:32px;">&gt; These demo files are already sanitized — same workflow for your CRM export.</p>
+          </div>
+
+          <div class="ba" style="flex-direction:column; gap:24px;">
+            <div class="ba" style="gap:18px;">
+              <div class="chip">
+                <div class="h">BEFORE</div>
+                <div class="row">Whitfield / Eleanor</div>
+                <div class="row">Okafor / Daniel</div>
+                <div class="row">Nakamura / Mei</div>
+              </div>
+              <div class="arrow">→</div>
+              <div class="chip">
+                <div class="h">AFTER</div>
+                <div class="row blank">▮▮▮▮▮ / ▮▮▮▮</div>
+                <div class="row blank">▮▮▮▮▮ / ▮▮▮▮</div>
+                <div class="row blank">▮▮▮▮▮ / ▮▮▮</div>
+              </div>
+            </div>
+            <div class="panel" style="box-shadow:0 18px 40px -24px rgba(15,42,74,.45);">
+              <div class="bar"><i class="d1"></i><i class="d2"></i><i class="d3"></i><span>sanitize-local.txt</span></div>
+              <pre style="font-size:22px; line-height:1.55; padding:22px 26px;"><span class="cm">// run locally — Excel, Cursor, not public chat</span>
+Remove names &amp; IDs. Output <span class="kw">aggregates only</span> as JSON:
+status counts · top countries · grades · sports ·
+months · financial aid split. <span class="kw">No row-level data.</span></pre>
+            </div>
+          </div>
+        </div>
+      </div>
+      <span class="pageno">05</span>
+    </div>
+  </section>
+
+  <!-- ===== 6 · THREE CANVASES (LIVE PROMPT) ===== -->
+  <section class="bg-navy" data-screen-label="06" data-label="06" data-notes="Copy prompt from slide + JSON from LIVE-PROMPTS.md. Same prompt in ChatGPT, Claude, Gemini Canvas.">
+    <div class="frame">
+      <span class="tag">// live demo</span>
+      <div class="body top" style="margin-top:36px;">
+        <h2 class="slide-title">Same prompt, three Canvases</h2>
+        <div class="rule"></div>
+        <p class="footnote" style="margin-top:16px; opacity:.9;">Paste the prompt below + sanitized JSON from <span style="color:var(--gold-soft);">LIVE-PROMPTS.md</span> into each tool.</p>
+
+        <div class="canvas-layout">
+          <div class="canvas-tools">
+            <div class="col-card">
+              <p class="tool-tag">Canvas</p>
+              <h3>ChatGPT</h3>
+              <p class="muted">Fast first draft; nudge inline.</p>
+            </div>
+            <div class="col-card">
+              <p class="tool-tag">Artifacts</p>
+              <h3>Claude</h3>
+              <p class="muted">Strong layout and taste.</p>
+            </div>
+            <div class="col-card">
+              <p class="tool-tag">Canvas</p>
+              <h3>Gemini</h3>
+              <p class="muted">Handy when data lives in Sheets.</p>
+            </div>
+          </div>
+
+          <div class="panel prompt-panel">
+            <div class="bar"><i class="d1"></i><i class="d2"></i><i class="d3"></i><span>live-prompt.txt</span><span class="file-hint">+ JSON from LIVE-PROMPTS.md</span></div>
+            <pre><span class="st">Build one self-contained HTML page with Chart.js and Leaflet from this sanitized aggregate JSON:</span>
+
+<span class="cm">[PASTE JSON — LIVE-PROMPTS.md]</span>
+
+<span class="kw">CHARTS</span> <span class="cm">(subtitle on each):</span>
+status bar · world map · grade doughnut · sports bar ·
+monthly line · aid donut
+
+<span class="kw">STYLE:</span> crimson <span class="st">#8B0000</span> + charcoal <span class="st">#2D2D2D</span> · Inter + JetBrains Mono
+Grade filter slider · single file · offline · Print button
+Title: <span class="st">"Admissions Pipeline — sanitized demo data"</span></pre>
+          </div>
+        </div>
+      </div>
+      <span class="pageno">06</span>
+    </div>
+  </section>
+
+  <!-- ===== 7 · THE PATTERN TO STEAL ===== -->
+  <section class="bg-navy" data-screen-label="07" data-label="07">
+    <div class="frame">
+      <span class="tag">// the pattern</span>
+      <div class="body">
+        <h2 class="slide-title">The pattern to steal</h2>
+        <div class="rule"></div>
+        <div class="panel" style="margin-top:46px;">
+          <div class="bar"><i class="d1"></i><i class="d2"></i><i class="d3"></i><span>prompt.txt</span></div>
+          <pre style="font-size:30px; line-height:1.66;"><span class="kw">DATA:</span> sanitized aggregates only — never names or row-level rows
+<span class="kw">CHARTS:</span> [list views + plain-English subtitles for each]
+<span class="kw">STYLE:</span> our colors are [red &amp; black] — gradients of [primary] as theme
+<span class="cm">Single file, no backend. [Chart.js / Leaflet]</span></pre>
+        </div>
+        <div class="tagrow">
+          <span class="t">→ dashboard (Chart.js)</span>
+          <span class="t">→ map (Leaflet)</span>
+          <span class="t">→ printable report</span>
+        </div>
+      </div>
+      <span class="pageno">07</span>
+    </div>
+  </section>
+
+  <!-- ===== 8 · NEXT LEVEL: CURSOR (DEMO) ===== -->
+  <section class="bg-cream" data-screen-label="08" data-label="08">
+    <div class="frame">
+      <span class="tag">// demo 02</span>
+      <div class="body top" style="margin-top:64px;">
+        <h2 class="slide-title">Next level: Cursor</h2>
+        <div class="rule"></div>
+        <div style="display:grid; grid-template-columns:0.82fr 1.18fr; gap:72px; align-items:stretch; margin-top:48px; flex:1; min-height:0;">
+          <div class="stack" style="justify-content:center; gap:34px;">
+            <p class="lead">When a one-off isn't enough.</p>
+            <ul class="list">
+              <li><span class="mk">→</span><span>Multiple files, one project.</span></li>
+              <li><span class="mk">→</span><span>Iterate across turns — it remembers.</span></li>
+              <li><span class="mk">→</span><span>Version control &amp; run locally.</span></li>
+            </ul>
+          </div>
+          <div class="embed">
+            <div class="embed-head">
+              <span class="embed-label"><span class="dot"></span>LIVE: Built in Cursor</span>
+              <button class="open-btn" id="cursor-open">Open in new tab&nbsp;↗</button>
+            </div>
+            <iframe id="cursor-frame" title="Lost-to dashboard"></iframe>
+          </div>
+        </div>
+      </div>
+      <span class="pageno">08</span>
+    </div>
+  </section>
+
+  <!-- ===== 9 · TAKEAWAYS ===== -->
+  <section class="bg-navy" data-screen-label="09" data-label="09">
+    <div class="frame">
+      <span class="tag">// wrap</span>
+      <div class="body">
+        <h2 class="slide-title">Takeaways</h2>
+        <div class="rule"></div>
+        <ul class="list" style="margin-top:54px; gap:28px;">
+          <li class="fragment"><span class="mk">1</span><span><strong>Claude Design</strong> — slides &amp; layouts</span></li>
+          <li class="fragment"><span class="mk">2</span><span><strong>Canvas mode</strong> — quick one-off dashboards</span></li>
+          <li class="fragment"><span class="mk">3</span><span><strong>Sanitize the data</strong> — always, before public AI</span></li>
+          <li class="fragment"><span class="mk">4</span><span><strong>LLMs write the prompts</strong> — build, extract, refine</span></li>
+          <li class="fragment"><span class="mk">5</span><span><strong>Cursor for real work</strong> — multi-file projects</span></li>
+        </ul>
+        <div style="display:flex; align-items:center; gap:40px; margin-top:64px;">
+          <div class="qr"><img src="assets/repo-qr.png" alt="QR code — slides and prompts on GitHub"></div>
+          <div class="stack" style="gap:12px;">
+            <p class="footnote" style="margin-top:0; opacity:.85;">Slides, demos &amp; prompt cheat-sheet:</p>
+            <p class="term" style="font-size:26px;">&gt; rootlake.github.io/<span class="c">admissions_vibe_coding</span></p>
+            <p class="footnote" style="margin-top:0; opacity:.7; font-size:22px;">github.com/rootlake/admissions_vibe_coding</p>
+          </div>
+        </div>
+        <p class="term" style="margin-top:54px; font-size:32px; color:var(--gold);">&gt; end</p>
+      </div>
+      <span class="pageno">09</span>
+    </div>
+  </section>
+
+</div>
+</div>
+
+<!-- slide navigation dots (outside the scaled stage, fixed to viewport) -->
+<nav class="deck-dots" id="deckDots" aria-label="Slide navigation"></nav>
+
+<!-- reveal.js -->
+<script src="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.js"></script>
+<script>
+/* ============================================================
+   LIVE EMBEDS  —  paste your real URLs here before the talk.
+   Leave blank to show the styled placeholder.
+   ============================================================ */
+const EMBED_SRC = {
+  funnel: "demos/funnel.html",
+  cursor: "demos/lost-to.html"
+};
+
+function placeholderDoc(label, sub){
+  return `<!doctype html><html><head><meta charset="utf-8">
+  <style>
+    html,body{height:100%;margin:0;font-family:'JetBrains Mono',ui-monospace,monospace;}
+    body{display:flex;align-items:center;justify-content:center;
+      background:#0B2038;color:#D8BE7E;text-align:center;}
+    .box{border:2px dashed #C2A14D;border-radius:14px;padding:54px 60px;max-width:78%;
+      background:rgba(194,161,77,0.05);}
+    .lbl{font-size:26px;letter-spacing:.06em;color:#C2A14D;margin-bottom:18px;}
+    .big{font-family:Georgia,serif;font-size:40px;color:#F6F2E9;margin-bottom:22px;}
+    .sub{font-size:18px;line-height:1.6;color:#8B949E;}
+    .cur{display:inline-block;width:11px;height:22px;background:#C2A14D;margin-left:2px;
+      vertical-align:-3px;animation:b 1.1s steps(1) infinite;}
+    @keyframes b{50%{opacity:0;}}
+  
+@media print { .deck-dots { display: none; } }
+</style></head><body>
+    <div class="box">
+      <div class="lbl">● LIVE EMBED SLOT</div>
+      <div class="big">${label}<span class="cur"></span></div>
+      <div class="sub">${sub}</div>
+    </div></body></html>`;
+}
+
+function wireEmbed(key, frameId, btnId, label, sub){
+  const frame = document.getElementById(frameId);
+  const btn = document.getElementById(btnId);
+  const src = EMBED_SRC[key];
+  const doc = placeholderDoc(label, sub);
+  if(src){
+    frame.src = src;
+    frame.addEventListener('error', () => { frame.srcdoc = doc; });
+  } else { frame.srcdoc = doc; }
+  btn.addEventListener('click', () => {
+    if(src){ window.open(src, '_blank'); }
+    else {
+      const url = URL.createObjectURL(new Blob([doc], {type:'text/html'}));
+      window.open(url, '_blank');
+    }
+  });
+}
+
+wireEmbed('funnel','funnel-frame','funnel-open','Funnel dashboard',
+  'Open <b>demos/funnel.html</b> in a new tab if the embed fails.');
+wireEmbed('cursor','cursor-frame','cursor-open','Lost-to dashboard',
+  'Open <b>demos/lost-to.html</b> in a new tab if the embed fails.');
+
+/* reveal init — fixed 1920x1080, letterboxed & scaled to any screen */
+Reveal.initialize({
+  width: 1920,
+  height: 1080,
+  margin: 0,
+  minScale: 0.2,
+  maxScale: 2.0,
+  center: false,
+  controls: false,
+  progress: true,
+  hash: true,
+  transition: 'slide',
+  transitionSpeed: 'default',
+  keyboardCondition: 'focused'
+});
+
+/* ---- clickable navigation dots ---- */
+(function(){
+  const wrap = document.getElementById('deckDots');
+  const total = document.querySelectorAll('.reveal .slides > section').length;
+  for(let i=0; i<total; i++){
+    const b = document.createElement('button');
+    b.type = 'button';
+    b.setAttribute('aria-label', 'Go to slide ' + (i+1));
+    b.addEventListener('click', () => Reveal.slide(i));
+    wrap.appendChild(b);
+  }
+  function sync(){
+    const idx = Reveal.getIndices().h;
+    [...wrap.children].forEach((b, i) => b.classList.toggle('active', i === idx));
+  }
+  Reveal.on('ready', sync);
+  Reveal.on('slidechanged', sync);
+})();
+</script>
+</body>
+</html>

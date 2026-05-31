@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Where Admits Go Instead — Lost To</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{--green:#1B4332;--green-light:#2D6A4F;--sand:#F4E8D1;--copper:#B5651D;--ink:#1A1A1A;--muted:#5c6b63}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Inter,system-ui,sans-serif;background:var(--sand);color:var(--ink);min-height:100vh}
+header{background:linear-gradient(120deg,var(--green),var(--green-light));color:#fff;padding:1.25rem 1.5rem;border-bottom:4px solid var(--copper)}
+header h1{font-size:1.5rem;font-weight:700}
+header .sub{font-size:.85rem;opacity:.9;margin-top:.3rem;max-width:560px;line-height:1.4}
+header .meta{font-family:'JetBrains Mono',monospace;font-size:.68rem;color:rgba(255,255,255,.75);margin-top:.5rem}
+.toolbar{display:flex;flex-wrap:wrap;align-items:center;gap:.75rem;margin-top:1rem}
+.toggle-group{display:flex;border-radius:8px;overflow:hidden;border:2px solid rgba(255,255,255,.35)}
+.toggle-group button{font-family:'JetBrains Mono',monospace;font-size:.72rem;background:transparent;color:#fff;border:none;padding:.5rem 1rem;cursor:pointer}
+.toggle-group button.active{background:var(--copper)}
+.btn{font-family:'JetBrains Mono',monospace;font-size:.72rem;background:var(--copper);color:#fff;border:none;border-radius:6px;padding:.5rem .9rem;cursor:pointer;margin-left:auto}
+main{padding:1rem 1.5rem 2rem;max-width:1200px;margin:0 auto}
+.grid{display:grid;grid-template-columns:2fr 1fr;gap:1rem}
+@media(max-width:800px){.grid{grid-template-columns:1fr}}
+.card{background:#fff;border-radius:10px;padding:1.1rem;box-shadow:0 10px 30px -15px rgba(27,67,50,.35);border:1px solid rgba(27,67,50,.1)}
+.card h2{font-family:'JetBrains Mono',monospace;font-size:.7rem;letter-spacing:.05em;text-transform:uppercase;color:var(--green)}
+.card .hint{font-size:.78rem;color:var(--muted);margin:.25rem 0 .85rem}
+.side-stack{display:flex;flex-direction:column;gap:1rem}
+.chart-box{position:relative;height:480px}.chart-box.sm{height:200px}
+.summary{background:var(--green);color:#fff;border-radius:10px;padding:1rem;font-size:.85rem;line-height:1.5}
+.summary strong{color:var(--sand)}
+footer{text-align:center;font-family:'JetBrains Mono',monospace;font-size:.65rem;color:var(--muted);padding:1rem}
+@media print{.toolbar{display:none}}
+</style>
+</head>
+<body>
+<header>
+<h1>Where Admits Go Instead</h1>
+<p class="sub">Competitive intel — schools our admits chose instead (sanitized demo; fictional school names)</p>
+<p class="meta" id="recordMeta"></p>
+<div class="toolbar">
+<div class="toggle-group" id="genderToggle">
+<button type="button" data-g="All" class="active">All</button>
+<button type="button" data-g="Male">Male</button>
+<button type="button" data-g="Female">Female</button>
+</div>
+<button class="btn" onclick="window.print()">Print report ↗</button>
+</div></header>
+<main><div class="grid">
+<div class="card"><h2>Top competitor schools</h2><p class="hint">Where we lose admits — filter by gender</p><div class="chart-box"><canvas id="schoolsChart"></canvas></div></div>
+<div class="side-stack">
+<div class="summary" id="summaryBox"></div>
+<div class="card"><h2>Gender split</h2><p class="hint">Who we're losing — by gender</p><div class="chart-box sm"><canvas id="genderChart"></canvas></div></div>
+<div class="card"><h2>Why they left</h2><p class="hint">Not enrolling vs withdrew vs waitlist</p><div class="chart-box sm"><canvas id="statusChart"></canvas></div></div>
+</div></div></main>
+<footer>Aggregates only · Demo data · GBS Admissions Workshop · June 2026</footer>
+<script src="data/lost-to-data.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<script>
+const C={green:'#1B4332',copper:'#B5651D',mid:'#40916C',light:'#95D5B2'};
+let currentGender='All',schoolsChart,genderChart,statusChart;
+document.getElementById('recordMeta').textContent=LOST_TO_DATA.meta.recordCount+' records · sanitized aggregates';
+function schoolData(){return currentGender==='All'?LOST_TO_DATA.schools:(LOST_TO_DATA.byGender[currentGender]||{});}
+function updateSummary(){const s=schoolData(),top=Object.entries(s).sort((a,b)=>b[1]-a[1])[0],total=Object.values(s).reduce((a,b)=>a+b,0);
+const f=currentGender==='All'?'all students':currentGender.toLowerCase()+' students';
+document.getElementById('summaryBox').innerHTML='<strong>Top competitor</strong> ('+f+'): '+(top?top[0]:'—')+' ('+(top?top[1]:0)+' students)<br><strong>'+total+'</strong> total in current view';}
+function makeSchoolsChart(){const s=schoolData(),e=Object.entries(s).sort((a,b)=>a[1]-b[1]).slice(-15);
+if(schoolsChart)schoolsChart.destroy();
+schoolsChart=new Chart(document.getElementById('schoolsChart'),{type:'bar',data:{labels:e.map(x=>x[0]),datasets:[{data:e.map(x=>x[1]),backgroundColor:C.copper,borderRadius:4}]},
+options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{beginAtZero:true},y:{ticks:{font:{size:10},autoSkip:false}}}}});}
+const g=Object.entries(LOST_TO_DATA.gender);
+genderChart=new Chart(document.getElementById('genderChart'),{type:'doughnut',data:{labels:g.map(x=>x[0]),datasets:[{data:g.map(x=>x[1]),backgroundColor:[C.green,C.mid]}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom'}}}});
+const st=Object.entries(LOST_TO_DATA.status);
+statusChart=new Chart(document.getElementById('statusChart'),{type:'doughnut',data:{labels:st.map(x=>x[0]),datasets:[{data:st.map(x=>x[1]),backgroundColor:[C.green,C.copper,C.mid,C.light,'#74C69D']}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{boxWidth:10,font:{size:9}}}}}});
+document.getElementById('genderToggle').addEventListener('click',e=>{const b=e.target.closest('button[data-g]');if(!b)return;
+document.querySelectorAll('#genderToggle button').forEach(x=>x.classList.remove('active'));b.classList.add('active');currentGender=b.dataset.g;makeSchoolsChart();updateSummary();});
+makeSchoolsChart();updateSummary();
+</script></body></html>

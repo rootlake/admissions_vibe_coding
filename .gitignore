@@ -1,0 +1,12 @@
+.DS_Store
+.venv/
+node_modules/
+
+# Raw exports may contain PII — keep local only
+data-source/
+ref/Admission*.xlsx
+ref/Not*.csv
+
+# Local scratch / headshot source (copy in assets/ is published)
+Headshot2025.jpg
+scratchpad.md

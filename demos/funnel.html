@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admissions Pipeline — 2026–2027</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.css">
+<style>
+:root{--navy:#0F2A4A;--gold:#C2A14D;--cream:#F6F2E9;--ink:#14181F;--navy-deep:#0B2038;--gold-soft:#D8BE7E}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Inter,system-ui,sans-serif;background:var(--cream);color:var(--ink);min-height:100vh}
+header{background:linear-gradient(135deg,var(--navy),var(--navy-deep));color:var(--cream);padding:1.25rem 1.5rem 1rem;border-bottom:3px solid var(--gold)}
+header h1{font-family:'Cormorant Garamond',Georgia,serif;font-size:1.75rem;font-weight:600}
+header .sub{font-size:.85rem;opacity:.85;margin-top:.25rem}
+header .meta{font-family:'JetBrains Mono',monospace;font-size:.7rem;color:var(--gold-soft);margin-top:.5rem}
+.toolbar{display:flex;flex-wrap:wrap;align-items:center;gap:1rem;margin-top:1rem}
+.btn{font-family:'JetBrains Mono',monospace;font-size:.75rem;font-weight:500;background:var(--gold);color:var(--navy);border:none;border-radius:6px;padding:.45rem .85rem;cursor:pointer}
+.slider-wrap{flex:1;min-width:200px}
+.slider-wrap label{font-family:'JetBrains Mono',monospace;font-size:.72rem;color:var(--gold-soft);display:block;margin-bottom:.35rem}
+.slider-wrap input{width:100%;accent-color:var(--gold)}
+main{padding:1rem 1.5rem 2rem;max-width:1400px;margin:0 auto}
+.grid{display:grid;grid-template-columns:repeat(12,1fr);gap:1rem}
+.card{background:#fff;border:1px solid rgba(15,42,74,.12);border-radius:10px;padding:1rem;box-shadow:0 8px 24px -12px rgba(15,42,74,.25)}
+.card h2{font-family:'JetBrains Mono',monospace;font-size:.72rem;font-weight:500;letter-spacing:.04em;color:var(--navy);text-transform:uppercase}
+.card .hint{font-size:.78rem;color:#5b6675;margin:.2rem 0 .75rem;line-height:1.35}
+.span-8{grid-column:span 8}.span-4{grid-column:span 4}.span-12{grid-column:span 12}
+.chart-box{position:relative;height:220px}.chart-box.tall{height:340px}.chart-box.sm{height:180px}
+#map{height:340px;border-radius:8px;z-index:1}
+footer{text-align:center;font-family:'JetBrains Mono',monospace;font-size:.65rem;color:#8b93a1;padding:1rem;border-top:1px solid rgba(15,42,74,.1)}
+@media(max-width:900px){.span-8,.span-4,.span-12{grid-column:span 12}}
+@media print{header .toolbar,.btn{display:none}body{background:#fff}.card{break-inside:avoid;box-shadow:none}}
+</style>
+</head>
+<body>
+<header>
+<h1 id="title">Admissions Pipeline — 2026–2027</h1>
+<p class="sub">Sanitized demo data — aggregates only, no student names</p>
+<p class="meta" id="recordMeta"></p>
+<div class="toolbar">
+<div class="slider-wrap"><label>Filter by grade: <span id="gradeLabel" style="color:var(--cream);font-weight:600">All grades</span></label>
+<input type="range" id="gradeSlider" min="0" max="4" step="1" value="0"></div>
+<button class="btn" onclick="window.print()">Print report ↗</button>
+</div></header>
+<main><div class="grid">
+<div class="card span-8"><h2>Geographic reach</h2><p class="hint">Where families are coming from — circle size = inquiry count</p><div id="map"></div></div>
+<div class="card span-4"><h2>Pipeline status</h2><p class="hint">Where inquiries sit today — from first look to enrolled</p><div class="chart-box tall"><canvas id="statusChart"></canvas></div></div>
+<div class="card span-4"><h2>Grades applying for</h2><p class="hint">Which entry grades families are targeting</p><div class="chart-box"><canvas id="gradeChart"></canvas></div></div>
+<div class="card span-4"><h2>Financial aid</h2><p class="hint">How many families asked about financial aid</p><div class="chart-box"><canvas id="aidChart"></canvas></div></div>
+<div class="card span-4"><h2>Inquiry timing</h2><p class="hint">When inquiries arrive — plan visit season &amp; deadlines</p><div class="chart-box"><canvas id="monthChart"></canvas></div></div>
+<div class="card span-12"><h2>Athletic interests</h2><p class="hint">Most common sports cited (students may list multiple)</p><div class="chart-box sm"><canvas id="sportsChart"></canvas></div></div>
+</div></main>
+<footer>Aggregates only — no student names · Demo data · GBS Admissions Workshop · June 2026</footer>
+<script src="data/funnel-data.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+const C={navy:'#0F2A4A',gold:'#C2A14D',pal:['#0F2A4A','#C2A14D','#1a4a7a','#D8BE7E','#2d5a87','#8B7355','#4a7eb5','#6FA36F']};
+const GRADES=['All','9th','10th','11th','12th'];
+const gs=document.getElementById('gradeSlider'),gl=document.getElementById('gradeLabel');
+document.getElementById('title').textContent=FUNNEL_DATA.meta.title;
+document.getElementById('recordMeta').textContent=FUNNEL_DATA.meta.recordCount+' inquiry records · sanitized aggregates';
+let map,markers=[],charts={};
+function slice(){const g=GRADES[gs.value];gl.textContent=g==='All'?'All grades':g;
+if(g==='All')return{...FUNNEL_DATA,mapPoints:FUNNEL_DATA.mapPoints};
+const bg=FUNNEL_DATA.byGrade[g]||{};return{status:bg.status||{},country:bg.country||{},grade:{[g]:FUNNEL_DATA.grade[g]||0},sports:bg.sports||{},months:bg.months||{},aid:bg.aid||{},
+mapPoints:Object.entries(bg.country||{}).map(([country,count])=>{const pt=FUNNEL_DATA.mapPoints.find(p=>p.country===country);return pt?{...pt,count}:null}).filter(Boolean)};}
+function obj(o,s){let e=Object.entries(o);if(s)e.sort((a,b)=>b[1]-a[1]);return{labels:e.map(x=>x[0]),values:e.map(x=>x[1])};}
+map=L.map('map',{scrollWheelZoom:false}).setView([25,10],2);
+L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png',{attribution:'&copy; OSM'}).addTo(map);
+function updMap(pts){markers.forEach(m=>map.removeLayer(m));markers=[];const mx=Math.max(...pts.map(p=>p.count),1);
+pts.forEach(p=>{const m=L.circleMarker([p.lat,p.lng],{radius:8+(p.count/mx)*28,fillColor:C.gold,color:C.navy,weight:2,fillOpacity:.75}).bindPopup('<strong>'+p.country+'</strong><br>'+p.count+' inquiries');m.addTo(map);markers.push(m);});}
+function mk(id,type,cfg){if(charts[id])charts[id].destroy();charts[id]=new Chart(document.getElementById(id),{type,...cfg});}
+function refresh(){const d=slice();const st=obj(d.status,true);
+mk('statusChart','bar',{data:{labels:st.labels,datasets:[{data:st.values,backgroundColor:C.pal}]},options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{beginAtZero:true},y:{ticks:{font:{size:10}}}}}});
+const gr=obj(d.grade);mk('gradeChart','doughnut',{data:{labels:gr.labels,datasets:[{data:gr.values,backgroundColor:C.pal}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{boxWidth:12,font:{size:10}}}}}});
+const aid=obj(d.aid);mk('aidChart','doughnut',{data:{labels:aid.labels,datasets:[{data:aid.values,backgroundColor:['#C2A14D','#0F2A4A']}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom'}}}});
+const mo=obj(d.months);mk('monthChart','line',{data:{labels:mo.labels,datasets:[{data:mo.values,borderColor:C.navy,backgroundColor:'rgba(15,42,74,.12)',fill:true,tension:.3,pointBackgroundColor:C.gold}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{beginAtZero:true},x:{ticks:{maxRotation:45,font:{size:9}}}}}});
+const sp=obj(d.sports,true);mk('sportsChart','bar',{data:{labels:sp.labels,datasets:[{data:sp.values,backgroundColor:C.navy}]},options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{beginAtZero:true},y:{ticks:{font:{size:10}}}}}});
+updMap(d.mapPoints&&d.mapPoints.length?d.mapPoints:FUNNEL_DATA.mapPoints);}
+gs.addEventListener('input',refresh);refresh();
+</script></body></html>
