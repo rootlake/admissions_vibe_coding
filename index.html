@@ -212,16 +212,22 @@ p{ margin:0; }
   flex:none; display:flex; align-items:flex-end; gap:48px;
 }
 .title-brand{
-  display:flex; flex-direction:column; align-items:center; gap:20px;
+  display:flex; flex-direction:column; align-items:center; gap:16px;
+}
+.title-brand .portrait{
+  width:180px; height:270px; flex:none;
+  border-radius:12px; overflow:hidden;
+  box-shadow:0 16px 40px -10px rgba(0,0,0,.5);
 }
 .title-brand img.crest-img{
-  width:200px; height:200px; object-fit:contain;
-  filter: drop-shadow(0 10px 28px rgba(0,0,0,.3));
+  width:180px; height:270px; object-fit:contain; object-position:center;
+  background:#fff; padding:10px; box-sizing:border-box;
+  display:block;
 }
 .title-brand img.headshot{
-  width:200px; height:200px; object-fit:cover; object-position:center 12%;
-  border-radius:50%; border:4px solid var(--gold);
-  box-shadow:0 16px 40px -10px rgba(0,0,0,.5);
+  width:180px; height:270px; object-fit:cover; object-position:center 12%;
+  border:4px solid var(--gold); box-sizing:border-box;
+  display:block;
 }
 .title-brand .lbl{
   font-family:var(--mono); font-size:20px; letter-spacing:.08em;
@@ -301,11 +307,10 @@ p{ margin:0; }
           </div>
           <div class="title-aside">
             <div class="title-brand">
-              <img src="assets/pomfret-crest.png" alt="Pomfret School crest" class="crest-img">
-              <span class="lbl">Pomfret School</span>
+              <div class="portrait"><img src="assets/pomfret_crest.png" alt="Pomfret School" class="crest-img"></div>
             </div>
             <div class="title-brand">
-              <img src="assets/josh-lake-headshot.jpg" alt="Josh Lake" class="headshot">
+              <div class="portrait"><img src="assets/josh-lake-headshot.jpg" alt="Josh Lake" class="headshot"></div>
               <span class="lbl">Josh Lake</span>
             </div>
           </div>
