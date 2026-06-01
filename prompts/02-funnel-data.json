@@ -1,0 +1,139 @@
+{
+  "meta": {
+    "title": "Admissions Pipeline \u2014 2026\u20132027",
+    "recordCount": 407,
+    "sanitized": true
+  },
+  "status": {
+    "Inactive Inquiry": 172,
+    "Application Withdrawn": 6,
+    "Inquiry Completed": 34,
+    "Application Incomplete": 42,
+    "Enrolled": 55,
+    "Remain On Waitlist": 22,
+    "Waitlisted": 7,
+    "Parent Declined": 20,
+    "Applicant": 17,
+    "Earlywithdrawal": 4,
+    "Denied": 21,
+    "Wait One Year": 1,
+    "Review In Progress": 4,
+    "Declined Waitlist": 1,
+    "Inquiry": 1
+  },
+  "country": {
+    "United States": 116,
+    "Germany": 37,
+    "China": 30,
+    "Brazil": 28,
+    "Spain": 19,
+    "Canada": 13,
+    "Bahamas": 11,
+    "Jamaica": 10,
+    "Italy": 9,
+    "Turkey": 8
+  },
+  "grade": {
+    "9th": 125,
+    "10th": 112,
+    "11th": 128,
+    "12th": 42
+  },
+  "sports": {
+    "Tennis": 125,
+    "Swimming/Diving": 120,
+    "Basketball": 110,
+    "Soccer": 106,
+    "Volleyball": 83,
+    "Track and Field": 80,
+    "Golf": 71,
+    "Football": 59
+  },
+  "months": {
+    "2021-12": 1,
+    "2023-01": 1,
+    "2023-09": 1,
+    "2023-12": 1,
+    "2024-07": 1,
+    "2024-08": 1,
+    "2024-11": 1,
+    "2024-12": 6,
+    "2025-01": 3,
+    "2025-02": 5,
+    "2025-03": 3,
+    "2025-04": 12,
+    "2025-05": 5,
+    "2025-06": 7,
+    "2025-07": 21,
+    "2025-08": 20,
+    "2025-09": 23,
+    "2025-10": 29,
+    "2025-11": 38,
+    "2025-12": 45,
+    "2026-01": 63,
+    "2026-02": 23,
+    "2026-03": 19,
+    "2026-04": 16,
+    "2026-05": 5
+  },
+  "aid": {
+    "Yes": 137,
+    "No": 92
+  },
+  "mapPoints": [
+    {
+      "country": "United States",
+      "count": 116,
+      "lat": 39.8283,
+      "lng": -98.5795
+    },
+    {
+      "country": "Germany",
+      "count": 37,
+      "lat": 51.1657,
+      "lng": 10.4515
+    },
+    {
+      "country": "China",
+      "count": 30,
+      "lat": 35.8617,
+      "lng": 104.1954
+    },
+    {
+      "country": "Brazil",
+      "count": 28,
+      "lat": -14.235,
+      "lng": -51.9253
+    },
+    {
+      "country": "Spain",
+      "count": 19,
+      "lat": 40.4637,
+      "lng": -3.7492
+    },
+    {
+      "country": "Canada",
+      "count": 13,
+      "lat": 56.1304,
+      "lng": -106.3468
+    },
+    {
+      "country": "Bahamas",
+      "count": 11,
+      "lat": 25.0343,
+      "lng": -77.3963
+    },
+    {
+      "country": "Jamaica",
+      "count": 10,
+      "lat": 18.1096,
+      "lng": -77.2975
+    },
+    {
+      "country": "Italy",
+      "count": 9,
+      "lat": 41.8719,
+      "lng": 12.5674
+    }
+  ]
+}

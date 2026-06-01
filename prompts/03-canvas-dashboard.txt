@@ -1,0 +1,21 @@
+Build one self-contained HTML page with Chart.js and Leaflet from this sanitized aggregate JSON:
+
+[PASTE contents of 02-funnel-data.json]
+
+CHARTS (each needs a plain-English subtitle):
+1. Admission status bar — "Where inquiries sit in the pipeline"
+2. World map, circle markers sized by count — "Where families are from"
+3. Grade doughnut — "Grades applying for"
+4. Top sports horizontal bar — "Athletic interests"
+5. Monthly inquiry line chart — "When inquiries arrive"
+6. Financial aid donut — "Aid requests"
+
+STYLE & BRANDING:
+- Our school colors are crimson #8B0000 and charcoal #2D2D2D.
+- Use gradients and shades of crimson as the main theme.
+- Clean, board-meeting ready. Inter + JetBrains Mono fonts.
+
+Add a grade filter slider (9th–12th + All) that updates all charts.
+Single file, no backend, works offline from file://.
+Title: "Admissions Pipeline — sanitized demo data".
+Include a Print report button.

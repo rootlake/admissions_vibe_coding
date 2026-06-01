@@ -1,0 +1,3 @@
+Restyle demos/lost-to.html: our colors are [X] and [Y].
+Keep all data and chart logic. Update CSS variables, header, and chart colors only.
+Add a one-line subtitle under the title explaining this is competitive intel — where admits go instead.

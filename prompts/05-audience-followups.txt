@@ -1,0 +1,25 @@
+AUDIENCE FOLLOW-UP PROMPTS — paste after first draft appears
+
+--- Colors (red and black) ---
+Replace the STYLE block only with our school colors: red and black. Use gradients of red as the theme. Keep all data and charts unchanged.
+
+--- Add yield / conversion ---
+Add a summary card: enrolled ÷ total inquiries as % yield. Show it near the status chart.
+
+--- Boarding vs day ---
+We'd need a boarding/day column in the export first — show a sample 70/30 split as placeholder with a note that real data would come from the CRM export.
+
+--- Compare to last year ---
+Add a second dashed line series on the monthly chart labeled "Prior cycle (sample)".
+
+--- Printable for head of school ---
+Add @media print CSS: one page, hide the slider, show a date stamp and footnote in the footer.
+
+--- International vs domestic ---
+Add a toggle: US vs international using the country field; update the map and status chart when toggled.
+
+--- More map / less chart ---
+Make the map 60% width; stack smaller charts beside it.
+
+--- Lost-to / competitors ---
+Switch to lost-to dataset — use 08-lost-to-data.json and 09-lost-to-dashboard-FULL.txt

@@ -14,6 +14,7 @@ Slides, live demos, and copy-paste prompts for the **GBS AI in Admissions Worksh
 | [`demos/funnel.html`](demos/funnel.html) | Admissions pipeline dashboard (aggregates only) |
 | [`demos/lost-to.html`](demos/lost-to.html) | Competitive intel dashboard |
 | [`LIVE-PROMPTS.md`](LIVE-PROMPTS.md) | Sanitized JSON + Canvas / Cursor prompts |
+| [`prompts/`](prompts/) | Same prompts as plain `.txt` / `.json` for copy-paste |
 | [`PRESENTER-NOTES.md`](PRESENTER-NOTES.md) | Presenter cheat sheet |
 | [`RUNNING.md`](RUNNING.md) | Local server & shortcuts |
 

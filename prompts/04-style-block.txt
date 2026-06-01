@@ -1,0 +1,11 @@
+STYLE & BRANDING:
+- Our school colors are [PRIMARY] and [SECONDARY] (e.g. crimson #8B0000 and charcoal #2D2D2D).
+- Use gradients and shades of [PRIMARY] as the main theme; [SECONDARY] for headers and accents.
+- Background: light neutral. Text: dark, high contrast.
+- Typography: serif titles + sans body (or match our marketing site).
+- Optional: pull hex codes from our website / viewbook / brand guidelines.
+- Do NOT use stock photos of people.
+- Add a one-line plain-English subtitle under each chart for admissions staff.
+- Footer: "Aggregates only — no student names."
+
+Presets: navy #0F2A4A + gold #C2A14D | crimson #8B0000 + black | forest #1B4332 + sand #F4E8D1

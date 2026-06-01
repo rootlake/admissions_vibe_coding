@@ -1,0 +1,1 @@
+Shorten that prompt to under 200 words. Keep DATA / CHARTS / STYLE sections.

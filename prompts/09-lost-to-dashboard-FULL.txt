@@ -1,0 +1,81 @@
+Build a self-contained HTML page with Chart.js from this sanitized JSON:
+
+{
+  "meta": {
+    "title": "Where Admits Go Instead \u2014 'Lost To'",
+    "recordCount": 528,
+    "sanitized": true
+  },
+  "schools": {
+    "Moonridge Collegiate School": 33,
+    "Ravencrest College Preparatory": 31,
+    "Dawnspire Academy": 27,
+    "Thornfield Preparatory Institute": 23,
+    "Ironwood Collegiate": 23,
+    "Falconmere Preparatory": 19,
+    "Crownfield Preparatory School": 19,
+    "Valecrest Preparatory": 17,
+    "Sunvale Preparatory Academy": 16,
+    "Northlight Collegiate School": 16,
+    "Larkhaven Preparatory": 13,
+    "Foxglove Academy": 13,
+    "Emberwick Preparatory": 13,
+    "Highspire Preparatory School": 12,
+    "Skylark Preparatory": 12
+  },
+  "gender": {
+    "Male": 295,
+    "Female": 233
+  },
+  "status": {
+    "Not Enrolling": 511,
+    "Application Withdrawn": 8,
+    "Declined Waitlist": 6,
+    "Waitlisted": 1,
+    "Denied": 2
+  },
+  "byGender": {
+    "Male": {
+      "Ravencrest College Preparatory": 21,
+      "Moonridge Collegiate School": 20,
+      "Dawnspire Academy": 16,
+      "Ironwood Collegiate": 14,
+      "Crownfield Preparatory School": 12,
+      "Elderglen Preparatory School": 11,
+      "Valecrest Preparatory": 10,
+      "Wintermere School": 9,
+      "Skylark Preparatory": 9,
+      "Northlight Collegiate School": 9,
+      "Falconmere Preparatory": 9,
+      "Larkhaven Preparatory": 8,
+      "Public School": 7,
+      "Stormwatch Academy": 7,
+      "Mythvale Collegiate": 7
+    },
+    "Female": {
+      "Thornfield Preparatory Institute": 18,
+      "Moonridge Collegiate School": 13,
+      "Dawnspire Academy": 11,
+      "Falconmere Preparatory": 10,
+      "Sunvale Preparatory Academy": 10,
+      "Ravencrest College Preparatory": 10,
+      "Ironwood Collegiate": 9,
+      "Emberwick Preparatory": 9,
+      "Nightwell Academy": 9,
+      "Foxglove Academy": 8,
+      "Northlight Collegiate School": 7,
+      "Valecrest Preparatory": 7,
+      "Highspire Preparatory School": 7,
+      "Crownfield Preparatory School": 7,
+      "Crystalgate Academy": 6
+    }
+  }
+}
+
+- Horizontal bar: top 15 competitor schools — subtitle "Schools our admits chose instead"
+- Gender doughnut — subtitle "Who we're losing"
+- Status doughnut — subtitle "Not enrolling vs withdrew vs waitlist"
+- Gender toggle buttons (All / Male / Female) filter the bar chart
+
+STYLE: forest green #1B4332, sand #F4E8D1, copper #B5651D accents. Sans-forward.
+Single file, no backend. Print button. Footer: aggregates only.

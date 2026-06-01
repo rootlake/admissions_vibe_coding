@@ -1,0 +1,4 @@
+Look at demos/funnel.html and the aggregate data structure.
+Write a reusable prompt that would recreate this dashboard from sanitized JSON only.
+Include: chart list with plain-English subtitles, STYLE block placeholder, grade slider, print button.
+Output the prompt only — no code.

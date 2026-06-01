@@ -1,0 +1,9 @@
+Remove all names and student IDs from this admissions export.
+Output ONLY these aggregates as JSON I can paste into a public AI tool:
+- count by admission status
+- top 10 countries
+- grade distribution (9th–12th)
+- top 8 athletic interests (split comma-separated lists)
+- inquiries by month from inquiry_submit_date
+- financial aid requested Yes/No split
+No row-level data. No names.

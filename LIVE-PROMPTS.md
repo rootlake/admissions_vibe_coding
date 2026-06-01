@@ -2,6 +2,8 @@
 
 Copy-paste pack for live demos. **Never paste raw spreadsheet rows** — use the sanitized JSON below.
 
+**Easy copy-paste:** ready-to-use files in [`prompts/`](prompts/) — open `03-canvas-dashboard-FULL.txt` for the live Canvas demo (JSON included).
+
 ---
 
 ## Tier 0 — Sanitize (run locally, not in public chat)

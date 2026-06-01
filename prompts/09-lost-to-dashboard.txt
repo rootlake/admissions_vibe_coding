@@ -1,0 +1,11 @@
+Build a self-contained HTML page with Chart.js from this sanitized JSON:
+
+[PASTE contents of 08-lost-to-data.json]
+
+- Horizontal bar: top 15 competitor schools — subtitle "Schools our admits chose instead"
+- Gender doughnut — subtitle "Who we're losing"
+- Status doughnut — subtitle "Not enrolling vs withdrew vs waitlist"
+- Gender toggle buttons (All / Male / Female) filter the bar chart
+
+STYLE: forest green #1B4332, sand #F4E8D1, copper #B5651D accents. Sans-forward.
+Single file, no backend. Print button. Footer: aggregates only.
