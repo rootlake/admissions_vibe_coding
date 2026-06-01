@@ -1,0 +1,1 @@
+Fix the country chart: replace it with a D3 + TopoJSON choropleth world map. Load countries-110m from world-atlas on jsdelivr. Natural Earth projection. Crimson gradient fill by inquiry count. Hover tooltip (country + count) and a small legend. Not Leaflet, not hand-drawn blocks, not bubbles. Keep everything else the same.

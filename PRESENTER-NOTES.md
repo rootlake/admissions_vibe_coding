@@ -37,11 +37,12 @@ Private cheat sheet. Not projected.
 
 1. **Slide 2** — This deck = Claude Design. Fast, beautiful, hits limits on data projects.
 2. **Slide 4** — Pre-built funnel. "Spreadsheet in, dashboard out." Open in new tab for full screen.
-3. **Slide 5** — Sanitize first. Before/after chip + local sanitize prompt.
-4. **Slide 6** — Live Canvas demo. Prompt is on the slide; copy full text + JSON from `LIVE-PROMPTS.md`.
-5. **Slide 7** — DATA + CHARTS + STYLE pattern.
-6. **Slide 8** — Alt-tab to Cursor. iframe = lost-to artifact.
-7. **Slide 9** — Five takeaways (fragments).
+3. **Slide 2** — Quick poll: ChatGPT / Claude / Gemini / Other (show of hands).
+4. **Slide 6** — Sanitize first. Before/after chip + fake-data note for demos.
+5. **Slide 7** — Live Canvas demo. Edit prompt on slide; fake data, plain English.
+6. **Slide 8** — DATA + CHARTS + STYLE pattern.
+7. **Slide 9** — Alt-tab to Cursor. iframe = lost-to artifact.
+8. **Slide 10** — Five takeaways (fragments).
 
 ---
 

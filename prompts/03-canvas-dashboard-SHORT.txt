@@ -1,0 +1,7 @@
+One HTML admissions dashboard, fake demo data (~400 inquiries, no real names). Fast and simple.
+
+Four charts: big total + subtitle, pipeline status bars, world choropleth map (see below), grades 9th–12th.
+
+World map — D3 choropleth: use D3.js + TopoJSON. Load country shapes from CDN (world-atlas countries-110m on jsdelivr). Natural Earth projection. Color countries by inquiry count — crimson gradient (light tan = none, dark crimson = most). Hover tooltip with country name + count. Small legend. Not Leaflet, not hand-drawn blocks, not bubble scatter.
+
+Crimson red and charcoal gray. One HTML file; map needs one CDN fetch for country shapes. Fake data footer.

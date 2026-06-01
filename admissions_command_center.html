@@ -1,0 +1,1034 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admissions Command Center — Pembrook Academy</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/topojson/3.0.2/topojson.min.js"></script>
+<style>
+  :root {
+    --crimson: #8B1A1A;
+    --crimson-dark: #5C0F0F;
+    --crimson-light: #B84444;
+    --crimson-pale: #F5EDED;
+    --charcoal: #1E1E1E;
+    --charcoal-mid: #2D2D2D;
+    --charcoal-soft: #4A4A4A;
+    --offwhite: #F4F1EC;
+    --offwhite-warm: #EDE9E0;
+    --border: rgba(139,26,26,0.15);
+    --text-muted: #6B6460;
+    --gold: #B8933F;
+    --print-hide: block;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--offwhite);
+    color: var(--charcoal);
+    min-height: 100vh;
+  }
+
+  /* HEADER */
+  .header {
+    background: var(--charcoal);
+    border-bottom: 3px solid var(--crimson);
+    padding: 28px 48px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    animation: fadeDown 0.6s ease both;
+  }
+
+  .header-left { display: flex; align-items: baseline; gap: 20px; }
+
+  .school-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 13px;
+    font-weight: 400;
+    letter-spacing: 0.22em;
+    color: var(--gold);
+    text-transform: uppercase;
+  }
+
+  .page-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 22px;
+    font-weight: 500;
+    color: #F4F1EC;
+    letter-spacing: 0.02em;
+  }
+
+  .header-meta {
+    font-size: 12px;
+    color: rgba(244,241,236,0.45);
+    letter-spacing: 0.08em;
+    text-align: right;
+  }
+
+  .print-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    background: transparent;
+    border: 1px solid rgba(244,241,236,0.25);
+    color: rgba(244,241,236,0.7);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    padding: 7px 16px;
+    border-radius: 3px;
+    cursor: pointer;
+    transition: all 0.2s;
+    margin-top: 10px;
+  }
+  .print-btn:hover { border-color: var(--gold); color: var(--gold); }
+
+  /* HERO STAT */
+  .hero {
+    background: var(--crimson-dark);
+    padding: 40px 48px 36px;
+    display: flex;
+    align-items: baseline;
+    gap: 24px;
+    border-bottom: 1px solid var(--crimson);
+    animation: fadeDown 0.6s 0.1s ease both;
+  }
+
+  .hero-number {
+    font-family: 'Playfair Display', serif;
+    font-size: 80px;
+    font-weight: 600;
+    color: var(--offwhite);
+    line-height: 1;
+    letter-spacing: -0.02em;
+  }
+
+  .hero-label {
+    font-size: 14px;
+    color: rgba(244,241,236,0.6);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    line-height: 1.6;
+  }
+
+  .hero-label strong {
+    display: block;
+    font-size: 18px;
+    font-weight: 500;
+    color: var(--offwhite);
+    letter-spacing: 0.03em;
+    margin-bottom: 2px;
+  }
+
+  .hero-stats {
+    margin-left: auto;
+    display: flex;
+    gap: 40px;
+    align-items: center;
+  }
+
+  .hero-stat { text-align: center; }
+  .hero-stat-val {
+    font-family: 'Playfair Display', serif;
+    font-size: 32px;
+    font-weight: 500;
+    color: var(--gold);
+    display: block;
+  }
+  .hero-stat-lbl {
+    font-size: 11px;
+    color: rgba(244,241,236,0.5);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  /* FILTER BAR */
+  .filter-bar {
+    background: var(--offwhite-warm);
+    border-bottom: 1px solid var(--border);
+    padding: 14px 48px;
+    display: flex;
+    align-items: center;
+    gap: 28px;
+    animation: fadeDown 0.6s 0.2s ease both;
+  }
+
+  .filter-label {
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    white-space: nowrap;
+  }
+
+  .grade-slider { flex: 1; max-width: 340px; accent-color: var(--crimson); cursor: pointer; }
+
+  .grade-display {
+    font-family: 'Playfair Display', serif;
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--crimson);
+    min-width: 80px;
+  }
+
+  .grade-hint { font-size: 11px; color: var(--text-muted); }
+
+  .filter-total {
+    margin-left: auto;
+    font-size: 13px;
+    color: var(--charcoal-soft);
+  }
+  .filter-total strong { color: var(--crimson); font-weight: 500; }
+
+  /* GRID */
+  .grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto auto auto;
+    gap: 1px;
+    background: var(--border);
+    border-top: 1px solid var(--border);
+  }
+
+  .card {
+    background: var(--offwhite);
+    padding: 28px 32px 24px;
+    opacity: 0;
+    transform: translateY(14px);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+  }
+  .card.visible { opacity: 1; transform: translateY(0); }
+
+  .card-full { grid-column: 1 / -1; }
+
+  .card-title {
+    font-size: 10px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 4px;
+  }
+
+  .card-heading {
+    font-family: 'Playfair Display', serif;
+    font-size: 18px;
+    font-weight: 500;
+    color: var(--charcoal);
+    margin-bottom: 20px;
+    line-height: 1.2;
+  }
+
+  /* PIPELINE */
+  .pipeline { display: flex; gap: 0; align-items: stretch; margin-top: 8px; }
+
+  .stage {
+    flex: 1;
+    padding: 16px 14px 14px;
+    background: var(--offwhite-warm);
+    border: 1px solid var(--border);
+    border-right: none;
+    transition: background 0.3s;
+    position: relative;
+  }
+  .stage:last-child { border-right: 1px solid var(--border); }
+  .stage:hover { background: var(--crimson-pale); }
+
+  .stage-arrow {
+    position: absolute;
+    right: -11px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 0;
+    height: 0;
+    border-top: 14px solid transparent;
+    border-bottom: 14px solid transparent;
+    border-left: 11px solid var(--offwhite);
+    z-index: 2;
+  }
+
+  .stage-label {
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 8px;
+  }
+
+  .stage-val {
+    font-family: 'Playfair Display', serif;
+    font-size: 28px;
+    font-weight: 600;
+    color: var(--charcoal);
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+
+  .stage-pct {
+    font-size: 11px;
+    color: var(--crimson);
+    font-weight: 500;
+  }
+
+  .stage-bar {
+    margin-top: 10px;
+    height: 3px;
+    background: var(--border);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+  .stage-bar-fill {
+    height: 100%;
+    background: var(--crimson);
+    border-radius: 2px;
+    transition: width 0.8s cubic-bezier(.4,0,.2,1);
+  }
+
+  /* MAP */
+  #world-map svg { width: 100%; height: auto; }
+
+  .map-tooltip {
+    position: fixed;
+    background: var(--charcoal);
+    color: var(--offwhite);
+    padding: 8px 14px;
+    border-radius: 3px;
+    font-size: 12px;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.15s;
+    z-index: 9999;
+    border-left: 3px solid var(--crimson);
+    white-space: nowrap;
+  }
+
+  /* CHART CONTAINERS */
+  .chart-wrap { position: relative; width: 100%; }
+
+  /* AID SPLIT */
+  .aid-grid {
+    display: grid;
+    grid-template-columns: 180px 1fr;
+    gap: 32px;
+    align-items: center;
+  }
+  .aid-donut { position: relative; width: 180px; height: 180px; }
+  .aid-donut canvas { width: 180px !important; height: 180px !important; }
+  .aid-donut-center {
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    pointer-events: none;
+  }
+  .aid-donut-pct {
+    font-family: 'Playfair Display', serif;
+    font-size: 26px;
+    font-weight: 600;
+    color: var(--crimson);
+    display: block;
+    line-height: 1;
+  }
+  .aid-donut-sub { font-size: 10px; color: var(--text-muted); letter-spacing: 0.08em; }
+
+  .aid-legend { display: flex; flex-direction: column; gap: 12px; }
+  .aid-row { display: flex; align-items: center; gap: 12px; }
+  .aid-swatch { width: 10px; height: 10px; border-radius: 2px; flex-shrink: 0; }
+  .aid-row-label { font-size: 13px; color: var(--charcoal-soft); flex: 1; }
+  .aid-row-val {
+    font-family: 'Playfair Display', serif;
+    font-size: 16px;
+    font-weight: 500;
+    color: var(--charcoal);
+    margin-left: auto;
+  }
+  .aid-row-pct { font-size: 11px; color: var(--text-muted); min-width: 34px; text-align: right; }
+
+  /* SPORTS */
+  .sports-list { display: flex; flex-direction: column; gap: 9px; }
+  .sport-row { display: flex; align-items: center; gap: 12px; }
+  .sport-rank {
+    font-family: 'Playfair Display', serif;
+    font-size: 13px;
+    color: var(--text-muted);
+    min-width: 18px;
+  }
+  .sport-name { font-size: 13px; color: var(--charcoal); flex: 1; }
+  .sport-bar-wrap { width: 120px; height: 4px; background: var(--border); border-radius: 2px; overflow: hidden; }
+  .sport-bar-fill {
+    height: 100%;
+    background: var(--crimson);
+    border-radius: 2px;
+    transition: width 0.8s cubic-bezier(.4,0,.2,1);
+  }
+  .sport-count { font-size: 12px; color: var(--charcoal-soft); min-width: 26px; text-align: right; }
+
+  /* GRADE PILLS */
+  .grade-pills { display: flex; flex-wrap: wrap; gap: 8px; }
+  .grade-pill {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--offwhite-warm);
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    padding: 8px 14px;
+    transition: all 0.3s;
+  }
+  .grade-pill.active {
+    background: var(--crimson);
+    border-color: var(--crimson);
+    color: var(--offwhite);
+  }
+  .grade-pill-label { font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; }
+  .grade-pill-val {
+    font-family: 'Playfair Display', serif;
+    font-size: 20px;
+    font-weight: 600;
+  }
+  .grade-pill.active .grade-pill-label,
+  .grade-pill.active .grade-pill-val { color: var(--offwhite); }
+  .grade-pill .grade-pill-label { color: var(--text-muted); }
+  .grade-pill .grade-pill-val { color: var(--charcoal); }
+
+  /* FOOTER */
+  .footer {
+    background: var(--charcoal);
+    border-top: 1px solid rgba(244,241,236,0.08);
+    padding: 16px 48px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .footer-text { font-size: 11px; color: rgba(244,241,236,0.3); letter-spacing: 0.08em; }
+
+  /* ANIMATIONS */
+  @keyframes fadeDown {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* PRINT */
+  @media print {
+    body { background: white; }
+    .print-btn { display: none !important; }
+    .header { background: #1E1E1E !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .hero { background: #5C0F0F !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .card { opacity: 1 !important; transform: none !important; break-inside: avoid; }
+    .map-tooltip { display: none !important; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-left">
+    <div>
+      <div class="school-name">Pembrook Academy</div>
+      <div class="page-title">Admissions Command Center</div>
+    </div>
+  </div>
+  <div class="header-meta">
+    <div>Academic Year 2024–25</div>
+    <div style="margin-top:2px;">Data as of May 31, 2025</div>
+    <button class="print-btn" onclick="window.print()">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9V2h12v7"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+      Print Report
+    </button>
+  </div>
+</div>
+
+<div class="hero">
+  <div>
+    <div class="hero-number" id="hero-number">412</div>
+    <div class="hero-label">
+      <strong>Total Inquiries</strong>
+      Admissions pipeline, all grades
+    </div>
+  </div>
+  <div class="hero-stats">
+    <div class="hero-stat">
+      <span class="hero-stat-val" id="hero-apps">178</span>
+      <span class="hero-stat-lbl">Applications</span>
+    </div>
+    <div class="hero-stat" style="border-left: 1px solid rgba(244,241,236,0.12); padding-left: 40px;">
+      <span class="hero-stat-val" id="hero-offers">89</span>
+      <span class="hero-stat-lbl">Offers Made</span>
+    </div>
+    <div class="hero-stat" style="border-left: 1px solid rgba(244,241,236,0.12); padding-left: 40px;">
+      <span class="hero-stat-val" id="hero-enrolled">61</span>
+      <span class="hero-stat-lbl">Enrolled</span>
+    </div>
+    <div class="hero-stat" style="border-left: 1px solid rgba(244,241,236,0.12); padding-left: 40px;">
+      <span class="hero-stat-val" id="hero-countries">38</span>
+      <span class="hero-stat-lbl">Countries</span>
+    </div>
+  </div>
+</div>
+
+<div class="filter-bar">
+  <span class="filter-label">Filter by grade</span>
+  <input type="range" class="grade-slider" id="grade-slider" min="0" max="6" step="1" value="0">
+  <span class="grade-display" id="grade-display">All Grades</span>
+  <span class="grade-hint">← drag to filter all charts</span>
+  <span class="filter-total">Showing <strong id="filter-count">412</strong> inquiries</span>
+</div>
+
+<div class="grid">
+
+  <!-- PIPELINE -->
+  <div class="card card-full" id="card-pipeline">
+    <div class="card-title">Admissions funnel</div>
+    <div class="card-heading">Where every inquiry stands today</div>
+    <div class="pipeline" id="pipeline"></div>
+  </div>
+
+  <!-- MAP -->
+  <div class="card card-full" id="card-map">
+    <div class="card-title">Geographic reach</div>
+    <div class="card-heading">Inquiries by country of origin</div>
+    <div id="world-map"></div>
+  </div>
+
+  <!-- GRADES -->
+  <div class="card" id="card-grades">
+    <div class="card-title">Applicant grades</div>
+    <div class="card-heading">Grade levels applying</div>
+    <div class="grade-pills" id="grade-pills"></div>
+  </div>
+
+  <!-- SPORTS -->
+  <div class="card" id="card-sports">
+    <div class="card-title">Athletic interests</div>
+    <div class="card-heading">Top sports requested by applicants</div>
+    <div class="sports-list" id="sports-list"></div>
+  </div>
+
+  <!-- TIMELINE -->
+  <div class="card card-full" id="card-timeline">
+    <div class="card-title">Inquiry volume</div>
+    <div class="card-heading">Monthly inquiries across the year</div>
+    <div class="chart-wrap" style="height: 220px;">
+      <canvas id="timeline-chart" role="img" aria-label="Monthly inquiry volume bar chart, showing peaks in October and February">Monthly inquiry trends throughout the academic year.</canvas>
+    </div>
+  </div>
+
+  <!-- FINANCIAL AID -->
+  <div class="card card-full" id="card-aid">
+    <div class="card-title">Financial aid</div>
+    <div class="card-heading">Aid request distribution across inquiries</div>
+    <div class="aid-grid">
+      <div class="aid-donut">
+        <canvas id="aid-chart" role="img" aria-label="Donut chart showing financial aid split: 42% requesting aid, 58% full pay">Financial aid split: 42% requesting aid, 58% full pay.</canvas>
+        <div class="aid-donut-center">
+          <span class="aid-donut-pct" id="aid-pct">42%</span>
+          <span class="aid-donut-sub">Aid requests</span>
+        </div>
+      </div>
+      <div class="aid-legend" id="aid-legend"></div>
+    </div>
+  </div>
+
+</div>
+
+<div class="footer">
+  <span class="footer-text">Pembrook Academy — Admissions Office — Confidential</span>
+  <span class="footer-text">Generated May 31, 2025 · Demo data only</span>
+</div>
+
+<div class="map-tooltip" id="map-tooltip"></div>
+
+<script>
+// ─── DATA ────────────────────────────────────────────────────────────────────
+
+const GRADES = ['Grade 6', 'Grade 7', 'Grade 8', 'Grade 9', 'Grade 10', 'Grade 11', 'Grade 12'];
+
+const BASE_DATA = {
+  gradeInquiries: [28, 35, 52, 89, 96, 72, 40],
+
+  pipeline: [
+    { label: 'Inquiry',     total: 412 },
+    { label: 'Application', total: 178 },
+    { label: 'Review',      total: 134 },
+    { label: 'Interview',   total: 101 },
+    { label: 'Offer',       total: 89  },
+    { label: 'Enrolled',    total: 61  },
+  ],
+
+  pipelineByGrade: [
+    [28,12,9,7,6,4], [35,15,11,8,7,5], [52,22,17,13,11,8],
+    [89,39,29,22,20,14], [96,42,32,24,21,15], [72,31,23,18,16,11], [40,17,13,9,8,4]
+  ],
+
+  countries: {
+    840: { name: 'United States', code: 'US', inquiries: 118 },
+    156: { name: 'China', code: 'CN', inquiries: 52 },
+    356: { name: 'India', code: 'IN', inquiries: 28 },
+    826: { name: 'United Kingdom', code: 'GB', inquiries: 21 },
+    124: { name: 'Canada', code: 'CA', inquiries: 18 },
+    276: { name: 'Germany', code: 'DE', inquiries: 14 },
+    410: { name: 'South Korea', code: 'KR', inquiries: 13 },
+    392: { name: 'Japan', code: 'JP', inquiries: 11 },
+    36:  { name: 'Australia', code: 'AU', inquiries: 10 },
+    458: { name: 'Malaysia', code: 'MY', inquiries: 9 },
+    756: { name: 'Switzerland', code: 'CH', inquiries: 9 },
+    784: { name: 'United Arab Emirates', code: 'AE', inquiries: 8 },
+    702: { name: 'Singapore', code: 'SG', inquiries: 7 },
+    76:  { name: 'Brazil', code: 'BR', inquiries: 7 },
+    250: { name: 'France', code: 'FR', inquiries: 7 },
+    554: { name: 'New Zealand', code: 'NZ', inquiries: 6 },
+    528: { name: 'Netherlands', code: 'NL', inquiries: 5 },
+    724: { name: 'Spain', code: 'ES', inquiries: 5 },
+    380: { name: 'Italy', code: 'IT', inquiries: 4 },
+    616: { name: 'Poland', code: 'PL', inquiries: 4 },
+    710: { name: 'South Africa', code: 'ZA', inquiries: 4 },
+    566: { name: 'Nigeria', code: 'NG', inquiries: 3 },
+    818: { name: 'Egypt', code: 'EG', inquiries: 3 },
+    682: { name: 'Saudi Arabia', code: 'SA', inquiries: 3 },
+    792: { name: 'Turkey', code: 'TR', inquiries: 3 },
+    76:  { name: 'Brazil', code: 'BR', inquiries: 7 },
+    MEX: { name: 'Mexico', code: 'MX', inquiries: 3, altId: 484 },
+    152: { name: 'Chile', code: 'CL', inquiries: 2 },
+    752: { name: 'Sweden', code: 'SE', inquiries: 2 },
+    578: { name: 'Norway', code: 'NO', inquiries: 2 },
+    246: { name: 'Finland', code: 'FI', inquiries: 2 },
+    56:  { name: 'Belgium', code: 'BE', inquiries: 2 },
+    203: { name: 'Czech Republic', code: 'CZ', inquiries: 2 },
+    348: { name: 'Hungary', code: 'HU', inquiries: 2 },
+    642: { name: 'Romania', code: 'RO', inquiries: 1 },
+    100: { name: 'Bulgaria', code: 'BG', inquiries: 1 },
+    804: { name: 'Ukraine', code: 'UA', inquiries: 1 },
+    470: { name: 'Malta', code: 'MT', inquiries: 1 },
+    484: { name: 'Mexico', code: 'MX', inquiries: 3 },
+  },
+
+  sports: [
+    { name: 'Lacrosse',    counts: [4,5,7,15,18,12,6]  },
+    { name: 'Soccer',      counts: [5,6,8,14,16,11,5]  },
+    { name: 'Basketball',  counts: [3,4,7,12,14,10,4]  },
+    { name: 'Swimming',    counts: [3,4,6,10,12,9,4]   },
+    { name: 'Tennis',      counts: [2,3,5,9,10,8,3]    },
+    { name: 'Ice Hockey',  counts: [2,3,5,8,9,7,3]     },
+    { name: 'Crew',        counts: [1,2,4,7,8,6,3]     },
+    { name: 'Golf',        counts: [1,2,3,6,7,5,2]     },
+  ],
+
+  monthly: [22, 19, 14, 11, 9, 8, 25, 38, 62, 55, 43, 106],
+
+  monthlyByGrade: [
+    [2,2,1,1,1,1,2,3,5,5,4,1],
+    [2,2,2,1,1,1,3,4,6,6,5,2],
+    [3,3,2,1,1,1,4,6,9,9,7,6],
+    [5,4,3,2,2,1,5,8,14,13,11,21],
+    [5,4,3,2,2,1,6,8,14,12,10,29],
+    [4,3,2,2,2,2,4,7,11,8,6,21],
+    [1,1,1,2,0,1,1,2,3,2,0,26],
+  ],
+
+  aid: {
+    full: 239,
+    partial: 98,
+    full_need: 75,
+  }
+};
+
+// ─── STATE ────────────────────────────────────────────────────────────────────
+let selectedGrade = 0; // 0 = all, 1-7 = specific grade index+1
+let timelineChart, aidChart;
+
+// ─── UTILS ────────────────────────────────────────────────────────────────────
+function getFilteredData(gradeIdx) {
+  if (gradeIdx === 0) return BASE_DATA;
+  const gi = gradeIdx - 1;
+  const scaleFactor = BASE_DATA.gradeInquiries[gi] / 412;
+
+  const pipe = BASE_DATA.pipelineByGrade[gi];
+  return {
+    gradeInquiries: BASE_DATA.gradeInquiries,
+    pipeline: BASE_DATA.pipeline.map((s, i) => ({ label: s.label, total: pipe[i] })),
+    sports: BASE_DATA.sports.map(s => ({
+      name: s.name,
+      total: s.counts[gi]
+    })),
+    monthly: BASE_DATA.monthlyByGrade[gi],
+    aid: {
+      full: Math.round(BASE_DATA.aid.full * scaleFactor),
+      partial: Math.round(BASE_DATA.aid.partial * scaleFactor),
+      full_need: Math.round(BASE_DATA.aid.full_need * scaleFactor),
+    }
+  };
+}
+
+// ─── PIPELINE ─────────────────────────────────────────────────────────────────
+function renderPipeline(gradeIdx) {
+  const d = gradeIdx === 0 ? BASE_DATA.pipeline : BASE_DATA.pipeline.map((s, i) => ({
+    label: s.label, total: BASE_DATA.pipelineByGrade[gradeIdx - 1][i]
+  }));
+  const container = document.getElementById('pipeline');
+  const max = d[0].total;
+  container.innerHTML = d.map((s, i) => `
+    <div class="stage">
+      <div class="stage-label">${s.label}</div>
+      <div class="stage-val">${s.total}</div>
+      <div class="stage-pct">${Math.round(s.total / max * 100)}%</div>
+      <div class="stage-bar">
+        <div class="stage-bar-fill" style="width: ${Math.round(s.total / max * 100)}%"></div>
+      </div>
+      ${i < d.length - 1 ? '<div class="stage-arrow"></div>' : ''}
+    </div>
+  `).join('');
+}
+
+// ─── GRADES ───────────────────────────────────────────────────────────────────
+function renderGrades(gradeIdx) {
+  const container = document.getElementById('grade-pills');
+  container.innerHTML = GRADES.map((g, i) => `
+    <div class="grade-pill ${gradeIdx === i + 1 ? 'active' : ''}">
+      <span class="grade-pill-label">${g}</span>
+      <span class="grade-pill-val">${BASE_DATA.gradeInquiries[i]}</span>
+    </div>
+  `).join('');
+}
+
+// ─── SPORTS ───────────────────────────────────────────────────────────────────
+function renderSports(gradeIdx) {
+  const container = document.getElementById('sports-list');
+  let sports;
+  if (gradeIdx === 0) {
+    sports = BASE_DATA.sports.map(s => ({
+      name: s.name,
+      total: s.counts.reduce((a, b) => a + b, 0)
+    }));
+  } else {
+    sports = BASE_DATA.sports.map(s => ({
+      name: s.name,
+      total: s.counts[gradeIdx - 1]
+    }));
+  }
+  sports.sort((a, b) => b.total - a.total);
+  const max = sports[0].total;
+  container.innerHTML = sports.map((s, i) => `
+    <div class="sport-row">
+      <span class="sport-rank">${i + 1}</span>
+      <span class="sport-name">${s.name}</span>
+      <div class="sport-bar-wrap">
+        <div class="sport-bar-fill" style="width: ${Math.round(s.total / max * 100)}%"></div>
+      </div>
+      <span class="sport-count">${s.total}</span>
+    </div>
+  `).join('');
+}
+
+// ─── TIMELINE CHART ───────────────────────────────────────────────────────────
+function initTimelineChart() {
+  const ctx = document.getElementById('timeline-chart');
+  const months = ['Sep','Oct','Nov','Dec','Jan','Feb','Mar','Apr','May','Jun','Jul','Aug'];
+  timelineChart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: months,
+      datasets: [{
+        label: 'Inquiries',
+        data: BASE_DATA.monthly,
+        backgroundColor: (ctx) => {
+          const val = ctx.parsed.y;
+          const max = Math.max(...BASE_DATA.monthly);
+          const alpha = 0.35 + 0.65 * (val / max);
+          return `rgba(139,26,26,${alpha.toFixed(2)})`;
+        },
+        borderRadius: 2,
+        borderSkipped: false,
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          backgroundColor: '#1E1E1E',
+          titleColor: '#F4F1EC',
+          bodyColor: 'rgba(244,241,236,0.7)',
+          borderColor: '#8B1A1A',
+          borderWidth: 1,
+          padding: 10,
+          callbacks: {
+            label: (ctx) => `  ${ctx.parsed.y} inquiries`
+          }
+        }
+      },
+      scales: {
+        x: {
+          grid: { display: false },
+          ticks: {
+            color: '#6B6460',
+            font: { family: 'DM Sans', size: 11 },
+            autoSkip: false
+          },
+          border: { color: 'rgba(139,26,26,0.15)' }
+        },
+        y: {
+          grid: { color: 'rgba(139,26,26,0.08)' },
+          ticks: {
+            color: '#6B6460',
+            font: { family: 'DM Sans', size: 11 },
+            maxTicksLimit: 6,
+            callback: v => Math.round(v)
+          },
+          border: { display: false }
+        }
+      },
+      animation: { duration: 600, easing: 'easeInOutQuart' }
+    }
+  });
+}
+
+function updateTimelineChart(gradeIdx) {
+  const data = gradeIdx === 0 ? BASE_DATA.monthly : BASE_DATA.monthlyByGrade[gradeIdx - 1];
+  timelineChart.data.datasets[0].data = data;
+  timelineChart.data.datasets[0].backgroundColor = (ctx) => {
+    const val = ctx.parsed.y;
+    const max = Math.max(...data);
+    if (max === 0) return 'rgba(139,26,26,0.3)';
+    const alpha = 0.35 + 0.65 * (val / max);
+    return `rgba(139,26,26,${alpha.toFixed(2)})`;
+  };
+  timelineChart.update();
+}
+
+// ─── AID CHART ────────────────────────────────────────────────────────────────
+function initAidChart() {
+  const ctx = document.getElementById('aid-chart');
+  const { full, partial, full_need } = BASE_DATA.aid;
+  aidChart = new Chart(ctx, {
+    type: 'doughnut',
+    data: {
+      labels: ['Full Pay', 'Partial Aid', 'Full Need'],
+      datasets: [{
+        data: [full, partial, full_need],
+        backgroundColor: ['#8B1A1A', '#B84444', '#D4A0A0'],
+        borderWidth: 0,
+        hoverOffset: 6
+      }]
+    },
+    options: {
+      responsive: false,
+      cutout: '68%',
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          backgroundColor: '#1E1E1E',
+          titleColor: '#F4F1EC',
+          bodyColor: 'rgba(244,241,236,0.7)',
+          borderColor: '#8B1A1A',
+          borderWidth: 1,
+          padding: 10,
+          callbacks: {
+            label: (ctx) => `  ${ctx.label}: ${ctx.parsed} inquiries`
+          }
+        }
+      },
+      animation: { duration: 700, easing: 'easeInOutQuart' }
+    }
+  });
+  renderAidLegend(BASE_DATA.aid);
+}
+
+function renderAidLegend(aid) {
+  const total = aid.full + aid.partial + aid.full_need;
+  const rows = [
+    { label: 'Full Pay', val: aid.full, color: '#8B1A1A' },
+    { label: 'Partial Aid', val: aid.partial, color: '#B84444' },
+    { label: 'Full Need', val: aid.full_need, color: '#D4A0A0' },
+  ];
+  document.getElementById('aid-legend').innerHTML = rows.map(r => `
+    <div class="aid-row">
+      <div class="aid-swatch" style="background: ${r.color};"></div>
+      <span class="aid-row-label">${r.label}</span>
+      <span class="aid-row-val">${r.val}</span>
+      <span class="aid-row-pct">${Math.round(r.val / total * 100)}%</span>
+    </div>
+  `).join('');
+  const aidPct = Math.round((aid.partial + aid.full_need) / total * 100);
+  document.getElementById('aid-pct').textContent = aidPct + '%';
+}
+
+function updateAidChart(gradeIdx) {
+  let aid;
+  if (gradeIdx === 0) {
+    aid = BASE_DATA.aid;
+  } else {
+    const gi = gradeIdx - 1;
+    const sf = BASE_DATA.gradeInquiries[gi] / 412;
+    aid = {
+      full: Math.round(BASE_DATA.aid.full * sf),
+      partial: Math.round(BASE_DATA.aid.partial * sf),
+      full_need: Math.round(BASE_DATA.aid.full_need * sf),
+    };
+  }
+  aidChart.data.datasets[0].data = [aid.full, aid.partial, aid.full_need];
+  aidChart.update();
+  renderAidLegend(aid);
+}
+
+// ─── HERO STATS ───────────────────────────────────────────────────────────────
+function updateHero(gradeIdx) {
+  let pipe;
+  if (gradeIdx === 0) {
+    pipe = BASE_DATA.pipeline;
+    document.getElementById('hero-countries').textContent = '38';
+  } else {
+    const gi = gradeIdx - 1;
+    pipe = BASE_DATA.pipeline.map((s, i) => ({
+      label: s.label, total: BASE_DATA.pipelineByGrade[gi][i]
+    }));
+    const sf = BASE_DATA.gradeInquiries[gi] / 412;
+    document.getElementById('hero-countries').textContent = Math.max(5, Math.round(38 * sf * 2.5));
+  }
+  document.getElementById('hero-number').textContent = pipe[0].total;
+  document.getElementById('hero-apps').textContent = pipe[1].total;
+  document.getElementById('hero-offers').textContent = pipe[4].total;
+  document.getElementById('hero-enrolled').textContent = pipe[5].total;
+  document.getElementById('filter-count').textContent = pipe[0].total;
+}
+
+// ─── MAP ─────────────────────────────────────────────────────────────────────
+function initMap() {
+  const container = document.getElementById('world-map');
+  const width = container.offsetWidth || 680;
+  const height = Math.round(width * 0.52);
+
+  const countries = BASE_DATA.countries;
+  const values = {};
+  for (const [id, c] of Object.entries(countries)) {
+    values[parseInt(id)] = c.inquiries;
+  }
+  const maxVal = Math.max(...Object.values(values));
+
+  const colorScale = d3.scaleLinear()
+    .domain([0, 1, Math.floor(maxVal / 3), maxVal])
+    .range(['#EDE9E0', '#D4B8B8', '#C07070', '#8B1A1A'])
+    .clamp(true);
+
+  const svg = d3.select(container)
+    .append('svg')
+    .attr('viewBox', `0 0 ${width} ${height}`)
+    .attr('width', '100%');
+
+  const projection = d3.geoNaturalEarth1()
+    .scale(width / 6.28)
+    .translate([width / 2, height / 2]);
+
+  const path = d3.geoPath(projection);
+  const tooltip = document.getElementById('map-tooltip');
+
+  d3.json('https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json').then(world => {
+    const features = topojson.feature(world, world.objects.countries).features;
+
+    svg.selectAll('path')
+      .data(features)
+      .join('path')
+      .attr('d', path)
+      .attr('fill', d => {
+        const v = values[d.id] || 0;
+        return colorScale(v);
+      })
+      .attr('stroke', '#F4F1EC')
+      .attr('stroke-width', 0.4)
+      .style('cursor', d => values[d.id] ? 'pointer' : 'default')
+      .on('mousemove', function(event, d) {
+        const v = values[d.id] || 0;
+        if (v === 0) {
+          tooltip.style.opacity = '0';
+          return;
+        }
+        const cData = Object.values(countries).find(c => {
+          return Object.keys(BASE_DATA.countries).map(Number).includes(d.id) &&
+            BASE_DATA.countries[d.id]?.inquiries === v;
+        });
+        const name = BASE_DATA.countries[d.id]?.name || `Country ${d.id}`;
+        tooltip.innerHTML = `<strong style="color:#F4F1EC">${name}</strong> &nbsp; ${v} inquiries`;
+        tooltip.style.left = (event.clientX + 14) + 'px';
+        tooltip.style.top = (event.clientY - 36) + 'px';
+        tooltip.style.opacity = '1';
+      })
+      .on('mouseleave', function() {
+        tooltip.style.opacity = '0';
+      });
+
+    // graticule
+    svg.append('path')
+      .datum(d3.geoGraticule()())
+      .attr('d', path)
+      .attr('fill', 'none')
+      .attr('stroke', 'rgba(139,26,26,0.06)')
+      .attr('stroke-width', 0.5);
+
+  }).catch(() => {
+    container.innerHTML += '<p style="color: var(--text-muted); font-size: 13px; padding: 20px 0;">Map unavailable — check network connection.</p>';
+  });
+
+  // Legend
+  const legendData = [
+    { color: '#EDE9E0', label: 'None' },
+    { color: '#D4B8B8', label: '1–5' },
+    { color: '#C07070', label: '6–20' },
+    { color: '#8B1A1A', label: '21+' },
+  ];
+  const legend = container.appendChild(document.createElement('div'));
+  legend.style.cssText = 'display:flex;align-items:center;gap:16px;margin-top:12px;justify-content:flex-end;';
+  legend.innerHTML = legendData.map(l => `
+    <span style="display:flex;align-items:center;gap:6px;font-size:11px;color:var(--text-muted);letter-spacing:0.06em;">
+      <span style="width:12px;height:12px;border-radius:2px;background:${l.color};border:1px solid var(--border);display:inline-block;"></span>${l.label}
+    </span>
+  `).join('');
+}
+
+// ─── SLIDER ───────────────────────────────────────────────────────────────────
+function updateAll(gradeIdx) {
+  const labels = ['All Grades', ...GRADES];
+  document.getElementById('grade-display').textContent = labels[gradeIdx];
+
+  renderPipeline(gradeIdx);
+  renderGrades(gradeIdx);
+  renderSports(gradeIdx);
+  updateTimelineChart(gradeIdx);
+  updateAidChart(gradeIdx);
+  updateHero(gradeIdx);
+}
+
+document.getElementById('grade-slider').addEventListener('input', function() {
+  selectedGrade = parseInt(this.value);
+  updateAll(selectedGrade);
+});
+
+// ─── SCROLL ANIMATION ────────────────────────────────────────────────────────
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach((e, i) => {
+    if (e.isIntersecting) {
+      setTimeout(() => e.target.classList.add('visible'), i * 80);
+      observer.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.05 });
+
+document.querySelectorAll('.card').forEach(c => observer.observe(c));
+
+// ─── INIT ─────────────────────────────────────────────────────────────────────
+renderPipeline(0);
+renderGrades(0);
+renderSports(0);
+initTimelineChart();
+initAidChart();
+initMap();
+
+</script>
+</body>
+</html>

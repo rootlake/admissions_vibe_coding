@@ -186,7 +186,7 @@ STYLE & BRANDING:
 
 ---
 
-## Tier 1 — Canvas one-off (slide 6 — all three tools)
+## Tier 1 — Canvas one-off (slide 7 — all three tools)
 
 Paste into ChatGPT Canvas, Claude Artifacts, and Gemini Canvas:
 

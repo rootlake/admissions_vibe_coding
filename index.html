@@ -204,33 +204,60 @@ p{ margin:0; }
 .crest .ico{ font-family:var(--serif); font-size:56px; opacity:.5; }
 
 /* title slide — title left, crest + headshot right */
-.title-hero{
-  display:flex; align-items:center; gap:80px; width:100%;
+.title-slide .body{ margin-top:32px; justify-content:center; }
+.title-slide .title-hero{
+  display:grid;
+  grid-template-columns: 1fr 1fr;
+  gap:0;
+  align-items:center;
+  width:100%;
 }
-.title-main{ flex:1; min-width:0; }
-.title-aside{
-  flex:none; display:flex; align-items:flex-end; gap:48px;
+.title-slide .title-main{ min-width:0; padding-right:32px; z-index:1; }
+.title-slide .title-main h1{
+  font-size:108px;
+  line-height:0.98;
+  letter-spacing:-0.02em;
+}
+.title-slide .title-main .lead{
+  font-size:52px;
+  margin-top:36px;
+  max-width:none;
+}
+.title-slide .title-main .rule{ width:120px; margin-top:28px; }
+.title-slide .title-aside{
+  display:flex;
+  align-items:flex-end;
+  justify-content:center;
+  gap:28px;
+  width:100%;
+  margin-left:-96px;
+  position:relative;
+  z-index:2;
 }
 .title-brand{
   display:flex; flex-direction:column; align-items:center; gap:16px;
 }
 .title-brand .portrait{
-  width:180px; height:270px; flex:none;
-  border-radius:12px; overflow:hidden;
-  box-shadow:0 16px 40px -10px rgba(0,0,0,.5);
+  flex:none;
+  width:448px;
+  aspect-ratio:1.02 / 1;
+  border-radius:14px; overflow:hidden;
+  box-shadow:0 20px 50px -12px rgba(0,0,0,.55);
 }
-.title-brand img.crest-img{
-  width:180px; height:270px; object-fit:contain; object-position:center;
-  background:#fff; padding:10px; box-sizing:border-box;
+.title-brand--crest .portrait{ background:#fff; }
+.title-brand--crest img.crest-img{
+  width:100%; height:100%;
+  object-fit:cover; object-position:center;
   display:block;
 }
-.title-brand img.headshot{
-  width:180px; height:270px; object-fit:cover; object-position:center 12%;
+.title-brand--photo img.headshot{
+  width:100%; height:100%;
+  object-fit:cover; object-position:50% 16%;
   border:4px solid var(--gold); box-sizing:border-box;
   display:block;
 }
 .title-brand .lbl{
-  font-family:var(--mono); font-size:20px; letter-spacing:.08em;
+  font-family:var(--mono); font-size:22px; letter-spacing:.08em;
   color:var(--gold-soft); text-align:center; opacity:.9;
 }
 
@@ -244,8 +271,22 @@ p{ margin:0; }
 .canvas-tools .col-card p{ font-size:22px; line-height:1.3; }
 .canvas-tools .col-card .tool-tag{ font-family:var(--mono); font-size:16px; color:var(--gold-soft); margin-bottom:10px; }
 .panel.prompt-panel{ flex:1; display:flex; flex-direction:column; min-height:0; margin-top:0; }
-.panel.prompt-panel pre{ flex:1; font-size:19px; line-height:1.5; padding:20px 26px; overflow:hidden; }
-.panel.prompt-panel .bar span.file-hint{ margin-left:auto; font-size:16px; color:var(--code-comment); }
+.panel.prompt-panel .prompt-editor{
+  flex:1; min-height:0; overflow-y:auto;
+  margin:0; padding:28px 34px;
+  font-family:var(--sans); font-size:30px; line-height:1.58;
+  color:var(--code-text); white-space:pre-wrap;
+  outline:none; cursor:text;
+}
+.panel.prompt-panel .prompt-editor:focus{
+  box-shadow:inset 0 0 0 2px rgba(194,161,77,.45);
+}
+.panel.prompt-panel .prompt-editor:empty::before{
+  content:'Click to add your prompt…'; color:var(--code-comment);
+}
+.panel.prompt-panel .bar span.file-hint{
+  margin-left:auto; font-size:15px; color:var(--code-comment);
+}
 
 /* QR / link placeholder */
 .qr{ width:150px; height:150px; border:2px solid var(--gold); border-radius:8px;
@@ -253,6 +294,27 @@ p{ margin:0; }
   font-size:16px; color:var(--gold-soft); text-align:center; line-height:1.4; flex:none;
   overflow:hidden; background:#fff; padding:8px; }
 .qr img{ width:100%; height:100%; object-fit:contain; display:block; }
+
+/* takeaways closing slide */
+.takeaways-layout{
+  display:grid; grid-template-columns:1.15fr 0.85fr; gap:72px;
+  align-items:center; width:100%;
+}
+.takeaways-thanks{
+  padding-left:56px;
+  border-left:2px solid rgba(194,161,77,.35);
+}
+.takeaways-thanks .thanks-title{
+  font-family:var(--serif); font-size:68px; font-weight:600;
+  line-height:1.08; color:var(--cream); letter-spacing:-0.01em;
+}
+.takeaways-thanks .thanks-lines{
+  margin-top:40px; display:flex; flex-direction:column; gap:18px;
+}
+.takeaways-thanks .thanks-lines p{
+  font-family:var(--serif); font-size:44px; font-weight:500;
+  line-height:1.2; color:var(--gold-soft);
+}
 
 /* share & export menu (meta slide) */
 .menu{ width:548px; flex:none; background:#fff; border-radius:16px;
@@ -286,6 +348,22 @@ p{ margin:0; }
 .deck-dots button:hover{ opacity:.9; }
 .deck-dots button.active{ background:var(--gold); opacity:1; transform:scale(1.25); }
 
+/* poll slide */
+.poll-grid{ display:grid; grid-template-columns:repeat(2,1fr); gap:28px; margin-top:48px; max-width:1200px; }
+.poll-card{
+  background:#fff; border:1px solid rgba(15,42,74,.12); border-radius:14px;
+  padding:36px 32px; display:flex; align-items:center; gap:28px;
+  box-shadow:0 14px 36px -16px rgba(15,42,74,.35);
+}
+.poll-card .hand{
+  flex:none; width:56px; height:56px; border-radius:50%;
+  border:2px dashed var(--gold); display:flex; align-items:center; justify-content:center;
+  font-size:28px; opacity:.75;
+}
+.poll-card h3{ margin:0; font-family:var(--serif); font-size:42px; font-weight:600; color:var(--navy); line-height:1.1; }
+.poll-card p{ margin:6px 0 0; font-size:22px; color:var(--muted, #5b6675); line-height:1.3; }
+.bg-cream .poll-card p{ color:#5b6675; }
+
 @media print { .deck-dots { display: none; } }
 </style>
 </head>
@@ -294,22 +372,22 @@ p{ margin:0; }
 <div class="slides">
 
   <!-- ===== 1 · TITLE ===== -->
-  <section class="bg-navy" data-screen-label="01" data-label="01">
+  <section class="bg-navy title-slide" data-screen-label="01" data-label="01">
     <div class="frame">
       <span class="tag">// intro</span>
-      <div class="body" style="justify-content:center;">
+      <div class="body">
         <div class="title-hero">
           <div class="title-main stack">
-            <p class="kicker" style="margin-bottom:22px;">// a working tour</p>
-            <h1 style="font-size:var(--type-display);">Vibe Coding for<br>Admissions Work</h1>
+            <p class="kicker" style="margin-bottom:24px;">// a working tour</p>
+            <h1>Vibe Coding for<br>Admissions Work</h1>
             <div class="rule"></div>
-            <p class="lead" style="margin-top:34px; opacity:.92;">Principles and Live Demos</p>
+            <p class="lead" style="opacity:.92;">Principles and Live Demos</p>
           </div>
           <div class="title-aside">
-            <div class="title-brand">
+            <div class="title-brand title-brand--crest">
               <div class="portrait"><img src="assets/pomfret_crest.png" alt="Pomfret School" class="crest-img"></div>
             </div>
-            <div class="title-brand">
+            <div class="title-brand title-brand--photo">
               <div class="portrait"><img src="assets/josh-lake-headshot.jpg" alt="Josh Lake" class="headshot"></div>
               <span class="lbl">Josh Lake</span>
             </div>
@@ -325,8 +403,53 @@ p{ margin:0; }
     </div>
   </section>
 
-  <!-- ===== 2 · BUILT IN CLAUDE (meta) ===== -->
-  <section class="bg-navy" data-screen-label="02" data-label="02">
+  <!-- ===== 2 · QUICK POLL ===== -->
+  <section class="bg-cream" data-screen-label="02" data-label="02" data-notes="Show of hands only — no clickers. Note counts mentally; tailor Canvas demo to what the room has.">
+    <div class="frame">
+      <span class="tag">// quick poll</span>
+      <div class="body top" style="margin-top:48px;">
+        <p class="kicker" style="margin-bottom:18px;">// show of hands</p>
+        <h2 class="slide-title">Who Has Access?</h2>
+        <p class="lead" style="margin-top:24px; font-size:36px; max-width:1100px;">Paid or school subscriptions we can use in today's live demos — raise your hand for each.</p>
+
+        <div class="poll-grid">
+          <div class="poll-card">
+            <span class="hand" aria-hidden="true">✋</span>
+            <div>
+              <h3>ChatGPT</h3>
+              <p>Plus / Team / Edu — Canvas mode</p>
+            </div>
+          </div>
+          <div class="poll-card">
+            <span class="hand" aria-hidden="true">✋</span>
+            <div>
+              <h3>Claude</h3>
+              <p>Pro / Team — Artifacts &amp; projects</p>
+            </div>
+          </div>
+          <div class="poll-card">
+            <span class="hand" aria-hidden="true">✋</span>
+            <div>
+              <h3>Gemini</h3>
+              <p>Advanced / Workspace — Canvas</p>
+            </div>
+          </div>
+          <div class="poll-card">
+            <span class="hand" aria-hidden="true">✋</span>
+            <div>
+              <h3>Other</h3>
+              <p>Copilot, school-provided tools, etc.</p>
+            </div>
+          </div>
+        </div>
+        <p class="footnote" style="margin-top:40px;">&gt; Use what you have!</p>
+      </div>
+      <span class="pageno">02</span>
+    </div>
+  </section>
+
+  <!-- ===== 3 · BUILT IN CLAUDE (meta) ===== -->
+  <section class="bg-navy" data-screen-label="03" data-label="03">
     <div class="frame">
       <span class="tag">// meta</span>
       <div class="body" style="flex-direction:row; align-items:center; gap:88px;">
@@ -357,12 +480,12 @@ p{ margin:0; }
           <div class="item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="4" y="5" width="16" height="14" rx="2"/><path d="M8 10l3 2-3 2"/><path d="M13 14h4"/></svg><span>Handoff to Claude Code&hellip;</span></div>
         </div>
       </div>
-      <span class="pageno">02</span>
+      <span class="pageno">03</span>
     </div>
   </section>
 
-  <!-- ===== 3 · WHAT IS VIBE CODING ===== -->
-  <section class="bg-cream" data-screen-label="03" data-label="03">
+  <!-- ===== 4 · WHAT IS VIBE CODING ===== -->
+  <section class="bg-cream" data-screen-label="04" data-label="04">
     <div class="frame">
       <span class="tag">// concept</span>
       <div class="body">
@@ -394,12 +517,12 @@ p{ margin:0; }
           </div>
         </div>
       </div>
-      <span class="pageno">03</span>
+      <span class="pageno">04</span>
     </div>
   </section>
 
-  <!-- ===== 4 · DATA → USEFUL (DEMO) ===== -->
-  <section class="bg-cream" data-screen-label="04" data-label="04">
+  <!-- ===== 5 · DATA → USEFUL (DEMO) ===== -->
+  <section class="bg-cream" data-screen-label="05" data-label="05">
     <div class="frame">
       <span class="tag">// demo 01</span>
       <div class="body top" style="margin-top:64px;">
@@ -409,7 +532,7 @@ p{ margin:0; }
           <div class="stack" style="justify-content:center; gap:30px;">
             <p class="lead">Spreadsheet in.<br>Dashboard out.</p>
             <p style="font-size:var(--type-body); line-height:1.4;" class="muted">A column of inquiries becomes a picture you can actually read in a meeting.</p>
-            <p class="footnote" style="margin-top:8px;">407 inquiry records → one readable view.</p>
+            <p class="footnote" style="margin-top:8px;">407 inquiry records → one readable view. <span style="opacity:.85;">Demo data for today — patterns are real, names are not.</span></p>
           </div>
           <div class="embed">
             <div class="embed-head">
@@ -420,18 +543,18 @@ p{ margin:0; }
           </div>
         </div>
       </div>
-      <span class="pageno">04</span>
+      <span class="pageno">05</span>
     </div>
   </section>
 
-  <!-- ===== 5 · FIRST: SANITIZE ===== -->
-  <section class="bg-cream" data-screen-label="05" data-label="05" data-notes="Sanitize before any live paste. Demo files in this repo are already aggregated.">
+  <!-- ===== 6 · FIRST: SANITIZE ===== -->
+  <section class="bg-cream" data-screen-label="06" data-label="06" data-notes="Sanitize before real data. Today's Canvas demo uses fake numbers on purpose. Optional mention: client-side password gate for shared links — not real security, keeps casual visitors out; say in Q&A not a full slide.">
     <div class="frame">
       <span class="accent-strip"></span>
       <span class="tag">// safety</span>
       <div class="body top" style="margin-top:48px;">
         <p class="kicker" style="margin-bottom:18px;">// critical — do this first</p>
-        <h2 class="slide-title">First: sanitize</h2>
+        <h2 class="slide-title">First: Sanitize</h2>
         <p class="lead" style="margin-top:22px; font-size:38px;">Before any data touches a public AI tool.</p>
 
         <div style="display:grid; grid-template-columns:1.15fr 1fr; gap:64px; align-items:start; margin-top:40px;">
@@ -442,9 +565,9 @@ p{ margin:0; }
               <li><span class="mk">03</span><span>Never paste FERPA / PII into public chat tools.</span></li>
               <li><span class="mk">04</span><span>Export a <em>sanitized copy</em> — work from that, keep raw files offline.</span></li>
               <li><span class="mk">05</span><span>Re-sanitize each cycle; don't reuse last year's export blindly.</span></li>
-              <li><span class="mk">06</span><span>Brand colors &amp; fonts from your style guide are fine — student photos are not.</span></li>
+              <li><span class="mk">06</span><span><strong>Today's demos use fake data</strong> — realistic numbers, no real students. Swap in your sanitized export when you go live.</span></li>
             </ul>
-            <p class="footnote" style="margin-top:32px;">&gt; These demo files are already sanitized — same workflow for your CRM export.</p>
+            <p class="footnote" style="margin-top:32px;">&gt; Sanitize first for real work. For Canvas today, plain-English + fake demo numbers is enough.</p>
           </div>
 
           <div class="ba" style="flex-direction:column; gap:24px;">
@@ -473,18 +596,18 @@ months · financial aid split. <span class="kw">No row-level data.</span></pre>
           </div>
         </div>
       </div>
-      <span class="pageno">05</span>
+      <span class="pageno">06</span>
     </div>
   </section>
 
-  <!-- ===== 6 · THREE CANVASES (LIVE PROMPT) ===== -->
-  <section class="bg-navy" data-screen-label="06" data-label="06" data-notes="Copy prompt from slide + JSON from LIVE-PROMPTS.md. Same prompt in ChatGPT, Claude, Gemini Canvas.">
+  <!-- ===== 7 · THREE CANVASES (LIVE PROMPT) ===== -->
+  <section class="bg-navy" data-screen-label="07" data-label="07" data-notes="Edit the prompt live on slide 7. Same text into ChatGPT, Claude, Gemini Canvas. Human-language demo — no JSON paste.">
     <div class="frame">
       <span class="tag">// live demo</span>
       <div class="body top" style="margin-top:36px;">
-        <h2 class="slide-title">Same prompt, three Canvases</h2>
+        <h2 class="slide-title">Same Prompt, Three Canvases</h2>
         <div class="rule"></div>
-        <p class="footnote" style="margin-top:16px; opacity:.9;">Paste the prompt below + sanitized JSON from <span style="color:var(--gold-soft);">LIVE-PROMPTS.md</span> into each tool.</p>
+        <p class="footnote" style="margin-top:16px; opacity:.9;">Quick demo — keep it simple. Click the prompt to edit. Aim for ~3 minutes in Canvas.</p>
 
         <div class="canvas-layout">
           <div class="canvas-tools">
@@ -506,55 +629,51 @@ months · financial aid split. <span class="kw">No row-level data.</span></pre>
           </div>
 
           <div class="panel prompt-panel">
-            <div class="bar"><i class="d1"></i><i class="d2"></i><i class="d3"></i><span>live-prompt.txt</span><span class="file-hint">+ JSON from LIVE-PROMPTS.md</span></div>
-            <pre><span class="st">Build one self-contained HTML page with Chart.js and Leaflet from this sanitized aggregate JSON:</span>
+            <div class="bar"><i class="d1"></i><i class="d2"></i><i class="d3"></i><span>live-prompt.txt</span><span class="file-hint">click to edit</span></div>
+            <div class="prompt-editor" contenteditable="true" spellcheck="true" id="livePrompt">One HTML admissions dashboard, fake demo data (~400 inquiries, no real names). Fast and simple.
 
-<span class="cm">[PASTE JSON — LIVE-PROMPTS.md]</span>
+Four charts: big total + subtitle, pipeline status bars, world choropleth map (see below), grades 9th–12th.
 
-<span class="kw">CHARTS</span> <span class="cm">(subtitle on each):</span>
-status bar · world map · grade doughnut · sports bar ·
-monthly line · aid donut
+World map — D3 choropleth: use D3.js + TopoJSON. Load country shapes from CDN (world-atlas countries-110m on jsdelivr). Natural Earth projection. Color countries by inquiry count — crimson gradient (light tan = none, dark crimson = most). Hover tooltip with country name + count. Small legend. Not Leaflet, not hand-drawn blocks, not bubble scatter.
 
-<span class="kw">STYLE:</span> crimson <span class="st">#8B0000</span> + charcoal <span class="st">#2D2D2D</span> · Inter + JetBrains Mono
-Grade filter slider · single file · offline · Print button
-Title: <span class="st">"Admissions Pipeline — sanitized demo data"</span></pre>
+Crimson red and charcoal gray. One HTML file; map needs one CDN fetch for country shapes. Fake data footer.</div>
           </div>
-        </div>
-      </div>
-      <span class="pageno">06</span>
-    </div>
-  </section>
-
-  <!-- ===== 7 · THE PATTERN TO STEAL ===== -->
-  <section class="bg-navy" data-screen-label="07" data-label="07">
-    <div class="frame">
-      <span class="tag">// the pattern</span>
-      <div class="body">
-        <h2 class="slide-title">The pattern to steal</h2>
-        <div class="rule"></div>
-        <div class="panel" style="margin-top:46px;">
-          <div class="bar"><i class="d1"></i><i class="d2"></i><i class="d3"></i><span>prompt.txt</span></div>
-          <pre style="font-size:30px; line-height:1.66;"><span class="kw">DATA:</span> sanitized aggregates only — never names or row-level rows
-<span class="kw">CHARTS:</span> [list views + plain-English subtitles for each]
-<span class="kw">STYLE:</span> our colors are [red &amp; black] — gradients of [primary] as theme
-<span class="cm">Single file, no backend. [Chart.js / Leaflet]</span></pre>
-        </div>
-        <div class="tagrow">
-          <span class="t">→ dashboard (Chart.js)</span>
-          <span class="t">→ map (Leaflet)</span>
-          <span class="t">→ printable report</span>
         </div>
       </div>
       <span class="pageno">07</span>
     </div>
   </section>
 
-  <!-- ===== 8 · NEXT LEVEL: CURSOR (DEMO) ===== -->
-  <section class="bg-cream" data-screen-label="08" data-label="08">
+  <!-- ===== 8 · THE PATTERN TO STEAL ===== -->
+  <section class="bg-navy" data-screen-label="08" data-label="08">
+    <div class="frame">
+      <span class="tag">// the pattern</span>
+      <div class="body">
+        <h2 class="slide-title">The Pattern to Steal</h2>
+        <div class="rule"></div>
+        <div class="panel" style="margin-top:46px;">
+          <div class="bar"><i class="d1"></i><i class="d2"></i><i class="d3"></i><span>prompt.txt</span></div>
+          <pre style="font-size:30px; line-height:1.66;"><span class="kw">DATA:</span> sanitized aggregates only — never names or row-level rows
+<span class="kw">CHARTS:</span> [list views + plain-English subtitles for each]
+<span class="kw">STYLE:</span> our colors are [red &amp; black] — gradients of [primary] as theme
+<span class="cm">Single file, no backend. [Chart.js / D3 map]</span></pre>
+        </div>
+        <div class="tagrow">
+          <span class="t">→ dashboard (Chart.js)</span>
+          <span class="t">→ map (D3 choropleth)</span>
+          <span class="t">→ printable report</span>
+        </div>
+      </div>
+      <span class="pageno">08</span>
+    </div>
+  </section>
+
+  <!-- ===== 9 · NEXT LEVEL: CURSOR (DEMO) ===== -->
+  <section class="bg-cream" data-screen-label="09" data-label="09">
     <div class="frame">
       <span class="tag">// demo 02</span>
       <div class="body top" style="margin-top:64px;">
-        <h2 class="slide-title">Next level: Cursor</h2>
+        <h2 class="slide-title">Next Level: Cursor</h2>
         <div class="rule"></div>
         <div style="display:grid; grid-template-columns:0.82fr 1.18fr; gap:72px; align-items:stretch; margin-top:48px; flex:1; min-height:0;">
           <div class="stack" style="justify-content:center; gap:34px;">
@@ -574,37 +693,47 @@ Title: <span class="st">"Admissions Pipeline — sanitized demo data"</span></pr
           </div>
         </div>
       </div>
-      <span class="pageno">08</span>
+      <span class="pageno">09</span>
     </div>
   </section>
 
-  <!-- ===== 9 · TAKEAWAYS ===== -->
-  <section class="bg-navy" data-screen-label="09" data-label="09">
+  <!-- ===== 10 · TAKEAWAYS ===== -->
+  <section class="bg-navy" data-screen-label="10" data-label="10">
     <div class="frame">
       <span class="tag">// wrap</span>
       <div class="body">
-        <h2 class="slide-title">Takeaways</h2>
-        <div class="rule"></div>
-        <ul class="list" style="margin-top:54px; gap:28px;">
-          <li class="fragment"><span class="mk">1</span><span><strong>Sanitize the data</strong> — always, before public AI</span></li>
-          <li class="fragment"><span class="mk">2</span><span><strong>LLMs write the prompts</strong> — build, extract, refine</span></li>
-          <li class="fragment"><span class="mk">3</span><span><strong>Claude Design</strong> — slides &amp; layouts</span></li>
-          <li class="fragment"><span class="mk">4</span><span><strong>Canvas mode</strong> — quick one-off dashboards</span></li>
-          <li class="fragment"><span class="mk">5</span><span><strong>Cursor for real work</strong> — multi-file projects</span></li>
-        </ul>
-        <div style="display:flex; align-items:center; gap:40px; margin-top:64px;">
-          <div class="qr"><img src="assets/repo-qr.png" alt="QR code — slides and prompts on GitHub"></div>
-          <div class="stack" style="gap:12px;">
-            <p class="footnote" style="margin-top:0; opacity:.85;">Scan for takeaways, slide links &amp; demos:</p>
-            <p class="term" style="font-size:24px;">&gt; …/<span class="c">takeaways.html</span></p>
-            <p class="footnote" style="margin-top:0; opacity:.7; font-size:20px;">
-              <a href="takeaways.html" style="color:var(--gold-soft); text-decoration:none;">Open takeaways page ↗</a>
-            </p>
+        <div class="takeaways-layout">
+          <div class="takeaways-main">
+            <h2 class="slide-title">Takeaways</h2>
+            <div class="rule"></div>
+            <ul class="list" style="margin-top:54px; gap:28px;">
+              <li class="fragment"><span class="mk">1</span><span><strong>Sanitize the Data</strong> — always, before public AI</span></li>
+              <li class="fragment"><span class="mk">2</span><span><strong>LLMs Write the Prompts</strong> — build, extract, refine</span></li>
+              <li class="fragment"><span class="mk">3</span><span><strong>Claude Design</strong> — slides &amp; layouts</span></li>
+              <li class="fragment"><span class="mk">4</span><span><strong>Canvas Mode</strong> — quick one-off dashboards</span></li>
+              <li class="fragment"><span class="mk">5</span><span><strong>Cursor for Real Work</strong> — multi-file projects</span></li>
+            </ul>
+            <div style="display:flex; align-items:center; gap:40px; margin-top:64px;">
+              <div class="qr"><img src="assets/repo-qr.png" alt="QR code — slides and prompts on GitHub"></div>
+              <div class="stack" style="gap:12px;">
+                <p class="footnote" style="margin-top:0; opacity:.85;">Scan for takeaways, slide links &amp; demos:</p>
+                <p class="term" style="font-size:24px;">&gt; …/<span class="c">takeaways.html</span></p>
+                <p class="footnote" style="margin-top:0; opacity:.7; font-size:20px;">
+                  <a href="takeaways.html" style="color:var(--gold-soft); text-decoration:none;">Open takeaways page ↗</a>
+                </p>
+              </div>
+            </div>
+          </div>
+          <div class="takeaways-thanks fragment">
+            <h3 class="thanks-title">Thanks for Listening!</h3>
+            <div class="thanks-lines">
+              <p>Questions?</p>
+              <p>More Demos?</p>
+            </div>
           </div>
         </div>
-        <p class="term" style="margin-top:54px; font-size:32px; color:var(--gold);">&gt; end</p>
       </div>
-      <span class="pageno">09</span>
+      <span class="pageno">10</span>
     </div>
   </section>
 
@@ -672,6 +801,13 @@ wireEmbed('funnel','funnel-frame','funnel-open','Funnel dashboard',
   'Open <b>demos/funnel.html</b> in a new tab if the embed fails.');
 wireEmbed('cursor','cursor-frame','cursor-open','Lost-to dashboard',
   'Open <b>demos/lost-to.html</b> in a new tab if the embed fails.');
+
+/* editable live prompt — don't hijack arrow keys while typing */
+(function(){
+  const el = document.getElementById('livePrompt');
+  if (!el) return;
+  el.addEventListener('keydown', e => e.stopPropagation());
+})();
 
 /* reveal init — fixed 1920x1080, letterboxed & scaled to any screen */
 Reveal.initialize({

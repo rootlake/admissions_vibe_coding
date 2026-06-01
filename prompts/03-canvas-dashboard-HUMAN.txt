@@ -1,0 +1,11 @@
+Build a simple one-page admissions dashboard I can open in my browser. Use fake demo data only — about 400 inquiries, made-up numbers, no real student names. Keep it small and fast; I need this in a few minutes, not a perfect app.
+
+Show four things only:
+• A big total at the top with a plain-English subtitle
+• A bar chart: where families are in the pipeline (inactive, enrolled, incomplete, denied, etc.)
+• Where families are from — a world choropleth map: D3.js + TopoJSON, load country shapes from world-atlas (countries-110m via jsdelivr CDN), Natural Earth projection. Color countries by inquiry count (crimson gradient). Hover tooltip with name + count. Small legend. Not Leaflet, not fake block shapes, not bubbles on a blank canvas.
+• Grades applying for (9th through 12th)
+
+Colors: deep crimson red, dark charcoal gray, warm off-white. Board-meeting clean.
+
+One HTML file. Map needs one CDN fetch for country shapes. Footer: Fake demo data for presentation only.

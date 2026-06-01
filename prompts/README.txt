@@ -3,8 +3,11 @@ LIVE DEMO PROMPTS — copy-paste files
 
 Run order for the talk:
   01-sanitize-local.txt      Run locally (Excel/Cursor) — NOT in public chat
-  02-funnel-data.json        Sanitized data (safe for public AI)
-  03-canvas-dashboard-FULL.txt   Slide 6 — paste into ChatGPT / Claude / Gemini Canvas
+  03-canvas-dashboard-SHORT.txt  Slide 7 — live Canvas demo (default on slide)
+  03-canvas-dashboard-HUMAN.txt  Longer version if you want more detail
+  03-canvas-add-map.txt          Optional follow-up: fix country viz as D3 choropleth map
+  03-canvas-dashboard-FULL.txt   JSON version for Cursor / power users
+  02-funnel-data.json        Sanitized data (Cursor builds only)
   05-audience-followups.txt  If the room asks for tweaks
   06-meta-prompt-extract.txt Takeaway #2 — LLMs write the prompts
   07-meta-prompt-shorten.txt Follow-up to 06
